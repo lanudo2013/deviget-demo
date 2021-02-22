@@ -11,6 +11,9 @@ export class Constants {
         FAIL_REQUEST_POSTS: 'fail-request-posts',
 
         DISMISS_POST: 'dismiss-post',
-        SELECT_POST: 'select-post'
+        SELECT_POST: 'select-post',
+
+        READ_POSTS_IDS: 'read-posts-ids',
+        DISMISSED_POSTS_IDS: 'dismissed-posts-ids'
     }
 }
