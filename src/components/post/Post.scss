@@ -1,0 +1,50 @@
+.PostContainer {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    border-radius: 20px;
+    margin-right: 10px;
+    margin-top: 3px;
+    padding: 20px;
+    margin-bottom: 10px;
+    max-width: 450px;
+    box-shadow: 2px 1px 3px 2px rgb(191 191 191 / 42%);
+
+    .Header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .Author {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 10px;
+        }
+    }
+    .Body {
+        display: flex;
+        margin-top: 5px;
+        align-items: center;
+        border: solid 0px black;
+        .Thumbnail {
+        }
+        .Title {
+            vertical-align: center;
+            margin-left: 10px;
+            align-self: center;
+        }
+    }
+    .Footer {
+        margin-top: 7px;
+        display: flex;
+        justify-content: space-between;
+        .DismissButton {
+            padding-top: 1px;
+            padding-bottom: 1px;
+        }
+        .CommentsNum {
+            color: rgb(165, 165, 41);
+            font-size: 16px;
+            font-weight: bold;
+        }
+    }
+}
