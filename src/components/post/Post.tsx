@@ -46,7 +46,7 @@ export const PostUI = function(props: PostProps) {
         if (dismissAnimation) {
             props.onDismiss && props.onDismiss(p);
         }
-    }, [p, props.onDismiss]);
+    }, [p, props.onDismiss, dismissAnimation]);
 
     const pressDismiss = React.useCallback((e: any) => {
         e.stopPropagation();

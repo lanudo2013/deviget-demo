@@ -93,14 +93,57 @@ export class PostDBService {
                     // create an object store on the transaction
                     const objectStore = transaction.objectStore("DismissedPosts");
                     // add our newItem object to the object store
-                    const objectStoreRequest = objectStore.put({id});
-        
+                    const objectStoreRequest = objectStore.put({id: id});
                     objectStoreRequest.onsuccess = function(event) {
                         res('');
                     };
                     objectStoreRequest.onerror = (ev: Event) => {
                         rej(ev);
                     };
+                    return;
+                }
+                rej(new Error('Not created db'));
+            });
+        });
+        
+    }
+
+    public saveDismissPosts(ids: string[]): Promise<any> {
+        if (!ids || !ids.length) {
+            return Promise.resolve(null);
+        }
+        return this.getDBRef().then(() => {
+            return new Promise((res, rej) => {
+                if (this.dbInstance) {
+                    const transaction = this.dbInstance.transaction(["DismissedPosts"], "readwrite");
+    
+                    transaction.onerror = function(event) {
+                        rej(event);
+                    };
+                    // create an object store on the transaction
+                    const objectStore = transaction.objectStore("DismissedPosts");
+                    // add our newItem object to the object store
+                    const requests: IDBRequest[] = [];
+                    ids.forEach(id => {
+                        const obj = objectStore.put({id: id});
+                        requests.push(obj);
+                        obj.onsuccess = function(event) {
+                            let allfinished = true;
+                            for (const i in requests) {
+                                const req = requests[i];
+                                if (req && req.readyState === 'pending') {
+                                    allfinished = false;
+                                    break;
+                                }
+                            }
+                            if (allfinished) {
+                                res('');
+                            }
+                        };
+                        obj.onerror = (ev: Event) => {
+                            rej(ev);
+                        };
+                    });
                     return;
                 }
                 rej(new Error('Not created db'));
@@ -120,7 +163,7 @@ export class PostDBService {
                     const objectStore = transaction.objectStore("DismissedPosts");
                     const query = objectStore.getAll();
                     query.onsuccess = function(ev) {
-                        res((ev.target as any).result);
+                        res(((ev.target as any).result || []).map((x: any) => x.id));
                     };
                     query.onerror = function(ev) {
                         rej(ev);
@@ -144,7 +187,7 @@ export class PostDBService {
                     const objectStore = transaction.objectStore("ReadPosts");
                     const query = objectStore.getAll();
                     query.onsuccess = function(ev) {
-                        res((ev.target as any).result);
+                        res(((ev.target as any).result || []).map((x: any) => x.id));
                     };
                     query.onerror = function(ev) {
                         rej(ev);

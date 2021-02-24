@@ -13,20 +13,27 @@ export class PostHttpService {
         return this.instance;
     }
 
-    public getPosts(): Promise<any> {
+    public getPosts(after: string | null, limit: number): Promise<any> {
+        const params = [
+            limit > 0 ? `limit=${limit}` : null,
+            after ? `after=${after}` : null
+        ];
         return Promise.race([
             new Promise((resolve, reject) => {
                 setTimeout(() => {
                     reject(new ResponseDto<null>(null, false, '', Constants.ERRORS.TIMEOUT_CODE));
                 }, this.HTTP_TIMEOUT);
             }),
-            fetch(Constants.REDDIT_BASE_URL, {
-            }).then(res => res.json())
+            fetch(Constants.REDDIT_BASE_URL + '?' + params.filter(x => x !== null).join('&')).then(res => res.json())
             .then(response => {
                 if (response && response.data && response.data.children && response.data.children.length) {
-                    return response.data.children.map((x: any) => x.data);
+                    return {
+                        list: response.data.children.map((x: any) => x.data),
+                        after: response.data.after,
+                        before: response.data.before
+                    };
                 }
-                return [];
+                return {};
             })
         ]);
     }

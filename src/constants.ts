@@ -14,6 +14,7 @@ export class Constants {
         SELECT_POST: 'select-post',
 
         READ_POSTS_IDS: 'read-posts-ids',
-        DISMISSED_POSTS_IDS: 'dismissed-posts-ids'
+        DISMISSED_POSTS_IDS: 'dismissed-posts-ids',
+        UPDATE_CURRENT_ERROR: 'update-current-error'
     }
 }

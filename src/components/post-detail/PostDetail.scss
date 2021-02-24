@@ -1,0 +1,64 @@
+.PostDetailContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding-left: 2em;
+    padding-right: 1em;
+    overflow-y: auto;
+    height: 100%;
+    position: relative;
+    .Author {
+        text-align: left;
+        width: 100%;
+        height: 1em;
+        font-size: 1.2em;
+        margin-bottom: 0.8em;
+    }
+    .InnerContainer {
+        padding-left: 8%;
+        padding-right: 8%;
+        flex: 1;
+        flex-direction: column;
+        display: flex;
+    }
+    .Title {
+        text-align: center;
+        font-size: 1.6em;
+        color: grey;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+    .Body {
+        width: 100%;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        margin-bottom: 2em;
+        justify-content: center;
+        align-items: center;
+        .Img-container {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .PostPicture {
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            min-height: 300px;
+            min-width: 300px;
+            flex: 0.9;
+        }
+        
+        .Video {
+            flex: 0.9;
+            min-height: 300px;
+            min-width: 300px;
+        }
+        .Url {
+            text-align: center;
+            font-size: 1.5em;
+        }
+    }
+}
