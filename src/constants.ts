@@ -17,4 +17,6 @@ export class Constants {
         DISMISSED_POSTS_IDS: 'dismissed-posts-ids',
         UPDATE_CURRENT_ERROR: 'update-current-error'
     }
+
+    public static MOBILE_WIDHT_LIMIT_PX = 1200;
 }

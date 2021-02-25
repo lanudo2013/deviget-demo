@@ -1,11 +1,29 @@
+@import '../../variables';
 .PostListContainer {
     display: flex;
     flex-direction: column;
+    .MenuButton {
+        display: none;
+        top: -8px;
+    }
+    .PostListBody {
+        flex: 1;
+        display: flex;
+        z-index: 1;
+        background: #f5f2f2;
+        flex-direction: column;
+        height: 100%;
+        transform: translate3d(0%,0,0);
+        top: 0;
+    }
+    .AnimationOpen {
+        animation-duration: 1s !important;
+    }
     .PostListOptions {
         display: flex;
         flex-direction: row;
         padding: 5px;
-        min-width: 500px;
+        min-width: 480px;
         .Option {
             flex: 1;
             &.PageSizeDropdown {
@@ -17,6 +35,10 @@
                 padding-left: 10px;
             }
             &.ReloadButton {
+                margin-left: 4px;
+                margin-right: 4px;
+            }
+            &.DismissButton {
                 margin-left: 4px;
             }
         }
@@ -33,5 +55,16 @@
         padding-right: 20px;
         overflow-y: auto;
         border-right: groove 6px lightgrey;
+    }
+    @media screen and (max-width: $MOBILE_WIDTH_LIMIT) {
+        .PostListBody {
+            position: fixed;
+            transform: translate3d(-100%,0,0);
+            height: calc(100% - 50px);
+            top: 50px;
+        }
+        .MenuButton {
+            display: block;
+        }
     }
 }

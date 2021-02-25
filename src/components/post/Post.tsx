@@ -20,15 +20,24 @@ export const PostUI = function(props: PostProps) {
     const [dismissAnimation, setDismissAnimation] = useState<boolean>(false);
     const formatCreated = React.useCallback((dt: Date) => {
         const now = props.currentDate;
-        const diff = now.getTime() - dt.getTime();
+        const diff = now.getTime() + now.getTimezoneOffset() * 1000 * 60 - dt.getTime();
+        const days = Math.floor(diff / DAY_TIME);
+        const minutes = Math.floor(diff / MINUTE_TIME);
+        const hours = Math.floor(diff / HOUR_TIME);
         if (diff < HOUR_TIME) {
-            return `${Math.floor(diff / MINUTE_TIME)} minutes ago`;
+            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
         } else if (diff < DAY_TIME) {
-            return `${Math.floor(diff / HOUR_TIME)} hours ago`;
+            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
         } else if (diff < 5 * DAY_TIME) {
-            return `${Math.floor(diff / DAY_TIME)} days, ${(diff % DAY_TIME) / HOUR_TIME} hours ago`;
+            const hoursDiff = Math.floor((diff % DAY_TIME) / HOUR_TIME);
+            if (hoursDiff > 0) {
+                return `${days} day${days > 1 ? 's' : ''}, ${hoursDiff} hour${hoursDiff > 1 ? 's' : ''} ago`;
+            } else {
+                return `${days} day${days > 1 ? 's' : ''} ago`;
+            }
+            
         } else {
-            return `${Math.floor(diff / DAY_TIME)} days ago`;
+            return `${days} day${days > 1 ? 's' : ''} ago`;
         }
     }, []);
 

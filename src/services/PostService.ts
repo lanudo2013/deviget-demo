@@ -51,10 +51,10 @@ export class PostService {
                 } : null,
                 id: val.id,
                 subreddit: val.subreddit,
-                postType: fromPostType(val.post_hint),
+                postType: fromPostType(val),
                 postHtml: val.selftext_html,
                 postUrl: val.url_overridden_by_dest,
-                createdTime: new Date(val.created),
+                createdTime: new Date(val.created_utc * 1000),
                 numberOfComments: val.num_comments,
                 videoData: val.is_video && val.media ? this.getVideoData(val.media) : null
             } as Post;
@@ -79,10 +79,8 @@ export class PostService {
                 this.lastAuthorId = after;
                 localStorage.setItem('lastAuthorId', this.lastAuthorId || '');
                 collected = [...collected, ...result];
-                if (collected.length < limit) {
-                    return this.getPostsAux(limit - collected.length, collected);
-                } else {
-                    collected = collected.slice(0, limit);
+                if (result.length < limit) {
+                    return this.getPostsAux(limit - result.length, collected);
                 }
             } else {
                 if (after && this.lastAuthorId !== after) {
