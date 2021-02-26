@@ -2,6 +2,7 @@
 .PostListContainer {
     display: flex;
     flex-direction: column;
+    width: $POST_LIST_WIDTH;
     .MenuButton {
         display: none;
         top: -8px;
@@ -13,6 +14,7 @@
         background: #f5f2f2;
         flex-direction: column;
         height: 100%;
+        width: unset;
         transform: translate3d(0%,0,0);
         top: 0;
     }
@@ -23,7 +25,6 @@
         display: flex;
         flex-direction: row;
         padding: 5px;
-        min-width: 480px;
         .Option {
             flex: 1;
             &.PageSizeDropdown {
@@ -47,7 +48,6 @@
         display: flex;
         flex: 1;
         flex-direction: column;
-        max-width: 500px;
         margin-top: 5px;
         margin-bottom: 5px;
         padding-top: 20px;
@@ -57,11 +57,14 @@
         border-right: groove 6px lightgrey;
     }
     @media screen and (max-width: $MOBILE_WIDTH_LIMIT) {
+        width: unset;
         .PostListBody {
+            width: $POST_LIST_WIDTH;
             position: fixed;
             transform: translate3d(-100%,0,0);
             height: calc(100% - 50px);
             top: 50px;
+            border: solid 0.35px lightgrey;
         }
         .MenuButton {
             display: block;

@@ -38,13 +38,18 @@ export class PostService {
         return null;
     }
 
+    private isValidThumbnailUrl(val: string): boolean {
+        val = (val || '').toLowerCase();
+        return !(!val || val === 'default' || val === 'self') && (val.endsWith('.jpg') || val.endsWith('.png') || val.endsWith('.gif') || val.endsWith('.jpeg')) && val.length > 5;
+    }
+
     private mapToPost(val: any): Post | null {
         if (val) {
             return {
                 author: val.author_fullname,
                 title: val.title,
                 name: val.name,
-                thumbnailUrl: !val.thumbnail || val.thumbnail === 'default' || val.thumbnail === 'self' ? '' : val.thumbnail,
+                thumbnailUrl: !this.isValidThumbnailUrl(val.thumbnail) ? '' : val.thumbnail,
                 thumbnailDims: val.thumbnail_width && val.thumbnail_height ? {
                     width: val.thumbnail_width,
                     height: val.thumbnail_height
@@ -62,7 +67,7 @@ export class PostService {
         return null;
     } 
 
-    public getPostsAux(limit: number, collected: Post[]): Promise<Post[]> {
+    private getPostsAux(limit: number, collected: Post[]): Promise<Post[]> {
         return Promise.all([
             this.dbService.getDismissedKeys(),
             this.httpService.getPosts(this.lastAuthorId, limit)

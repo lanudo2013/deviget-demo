@@ -21,7 +21,7 @@ export class PostHttpService {
         return Promise.race([
             new Promise((resolve, reject) => {
                 setTimeout(() => {
-                    reject(new ResponseDto<null>(null, false, '', Constants.ERRORS.TIMEOUT_CODE));
+                    reject(new ResponseDto<null>(null, false, Constants.APP_MESSAGES.HTTP_TIMEOUT, Constants.ERRORS.TIMEOUT_CODE));
                 }, this.HTTP_TIMEOUT);
             }),
             fetch(Constants.REDDIT_BASE_URL + '?' + params.filter(x => x !== null).join('&')).then(res => res.json())

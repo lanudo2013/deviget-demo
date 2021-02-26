@@ -1,9 +1,10 @@
 import { Post } from "../../classes/interfaces/post";
-import React, { useState } from 'react';
+import React, { ForwardedRef, RefObject, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import moment from  'moment';
 import './Post.scss';
 import { Button } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/CancelOutlined';
+import { Constants } from "../../constants";
 
 const DAY_TIME = 1000 * 60 * 60 * 24;
 const HOUR_TIME = 1000 * 60 * 60;
@@ -13,11 +14,20 @@ interface PostProps {
     post: Post;
     currentDate: Date;
     onPress: (p: Post) => void;
-    onDismiss: (post: Post) => void;
+    onPressDismiss: (post: Post) => void;
 }
-export const PostUI = function(props: PostProps) {
+export interface PostRef {
+    fadeOut: () => Promise<any>;
+    id: string;
+    slideOut: (delay?: number) => Promise<any>;
+}
+const PostUIFn = function(props: PostProps, ref1: ForwardedRef<any>) {
     const [pressAnimation, setPressAnimation] = useState<boolean>(false);
-    const [dismissAnimation, setDismissAnimation] = useState<boolean>(false);
+    const [fadeOutAnimation, setDismissFadeOutAnimation] = useState<boolean>(false);
+    const [slideOutAnimation, setDismissSlideOutAnimation] = useState<boolean>(false);
+    const [hidden, setHidden] = useState<boolean>(false);
+    const resolveFadeOutAnim = useRef<any>(null);
+    const resolveSlideAnim = useRef<any>(null);
     const formatCreated = React.useCallback((dt: Date) => {
         const now = props.currentDate;
         const diff = now.getTime() + now.getTimezoneOffset() * 1000 * 60 - dt.getTime();
@@ -41,9 +51,39 @@ export const PostUI = function(props: PostProps) {
         }
     }, []);
 
-    const dismissButtonStyle = React.useMemo(() => ({paddingTop: '1px', paddingBottom: '1px', fontSize: '12px'}), []);
-
     const p = props.post;
+    const dismissButtonStyle = React.useMemo(() => ({paddingTop: '1px', paddingBottom: '1px', fontSize: '12px'}), []);
+    useImperativeHandle(ref1, () => ({
+        fadeOut: () => {
+            if (resolveFadeOutAnim.current) {
+                return Promise.reject('Animating');
+            }
+
+            setDismissFadeOutAnimation(true);
+            return new Promise(res => {
+                resolveFadeOutAnim.current = res;
+            });
+        },
+        slideOut: (delay?: number) => {
+            if (resolveSlideAnim.current) {
+                return Promise.reject('Animating');
+            }
+            if (!delay) {
+                setDismissSlideOutAnimation(true);
+            }
+            return new Promise(res => {
+                resolveSlideAnim.current = res;
+                if (delay) {
+                    setTimeout(() => {
+                        setDismissSlideOutAnimation(true);
+                    }, delay);
+                }
+            });
+        },
+        id: p.id
+    }), [p]);
+
+    
     const pressPost = React.useCallback((e) => {
         setPressAnimation(true);
         props.onPress && props.onPress(p);
@@ -52,23 +92,40 @@ export const PostUI = function(props: PostProps) {
     
     const animEnds = React.useCallback((e) => {
         setPressAnimation(false);
-        if (dismissAnimation) {
-            props.onDismiss && props.onDismiss(p);
+        if (fadeOutAnimation && resolveFadeOutAnim.current) {
+            resolveFadeOutAnim.current(true);
+        } else if (slideOutAnimation && resolveSlideAnim.current) {
+            setHidden(true);
+            resolveSlideAnim.current(true);
         }
-    }, [p, props.onDismiss, dismissAnimation]);
+        resolveSlideAnim.current = null;
+        resolveFadeOutAnim.current = null;
+        setDismissSlideOutAnimation(false);
+        setDismissFadeOutAnimation(false);
+    }, [p, fadeOutAnimation, slideOutAnimation]);
 
     const pressDismiss = React.useCallback((e: any) => {
         e.stopPropagation();
-        setDismissAnimation(true);
-    }, []);
+        props.onPressDismiss && props.onPressDismiss(p);
+    }, [props.onPressDismiss]);
+
+    const animationClassStr = React.useMemo(() => {
+        if (pressAnimation) {
+            return' animate__animated animate__headShake';
+        } else if (fadeOutAnimation) {
+            return ' animate__animated animate__fadeOut';
+        } else if (slideOutAnimation) {
+            return ' animate__animated animate__slideOutLeft';
+        } else {
+            return '';
+        }
+    }, [slideOutAnimation, fadeOutAnimation, pressAnimation]);
 
     if (!props.post) {
         return null;
     }
-    
 
-
-    return <div className={'PostContainer ' + (pressAnimation ? ' animate__animated animate__headShake' : '') + (dismissAnimation ? 'animate__animated animate__fadeOut' : '')} onClick={pressPost} onAnimationEnd={animEnds}>
+    return <div className={'PostContainer ' + animationClassStr} style={hidden ? {visibility: 'hidden'} : {}} onClick={pressPost} onAnimationEnd={animEnds}>
         <div className="Header">
             <span className="Author">{p.author}</span>
             <span className="CreatedAt">{formatCreated(p.createdTime)}</span>
@@ -78,8 +135,9 @@ export const PostUI = function(props: PostProps) {
             <span className="Title">{p.title}</span>
         </div>
         <div className="Footer">
-            <Button onClick={pressDismiss} color="default" size={'small'} style={dismissButtonStyle} variant="contained" startIcon={<DeleteIcon />}>Dismiss post</Button>
+            <Button onClick={pressDismiss} color="default" size={'small'} style={dismissButtonStyle} variant="contained" startIcon={<DeleteIcon />}>${Constants.APP_MESSAGES.DISMISS_BUTTON}</Button>
             <span className="CommentsNum">{p.numberOfComments} comment/s</span>
         </div>
     </div>;
 };
+export const PostUI = React.forwardRef(PostUIFn);
