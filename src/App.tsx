@@ -8,6 +8,7 @@ import { PostList } from './components/post-list/PostList';
 import { Constants } from './constants';
 import { PostService } from './services/PostService';
 import { updateCurrentError } from './state/actions';
+import 'intl/locale-data/jsonp/en-US';
 
 function App() {
   const [modalOpen, setModalOpen] = React.useState(false);

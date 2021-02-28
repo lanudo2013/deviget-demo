@@ -20,6 +20,7 @@ export class Constants {
         UPDATE_DONE_DISMISS_DATA: 'update-done-dismiss-data'
     }
 
+    public static POST_LIST_PAGE_SIZES = [25, 50, 100];
     public static MOBILE_WIDHT_LIMIT_PX = 1200;
 
     public static APP_MESSAGES = {

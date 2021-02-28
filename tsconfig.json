@@ -4,7 +4,7 @@
     "target": "es6",
     "sourceMap": true,
     "noImplicitAny": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "noEmit": true,
     "esModuleInterop": true,
     "allowJs": true,
@@ -16,7 +16,7 @@
       "esnext"
     ],
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,

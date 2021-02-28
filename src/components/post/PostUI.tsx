@@ -5,6 +5,7 @@ import './Post.scss';
 import { Button } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/CancelOutlined';
 import { Constants } from "../../constants";
+import Intl from 'intl';
 
 const DAY_TIME = 1000 * 60 * 60 * 24;
 const HOUR_TIME = 1000 * 60 * 60;
@@ -28,28 +29,36 @@ const PostUIFn = function(props: PostProps, ref1: ForwardedRef<any>) {
     const [hidden, setHidden] = useState<boolean>(false);
     const resolveFadeOutAnim = useRef<any>(null);
     const resolveSlideAnim = useRef<any>(null);
-    const formatCreated = React.useCallback((dt: Date) => {
+    const formatCreatedAt = React.useCallback((dt: Date) => {
         const now = props.currentDate;
-        const diff = now.getTime() + now.getTimezoneOffset() * 1000 * 60 - dt.getTime();
-        const days = Math.floor(diff / DAY_TIME);
-        const minutes = Math.floor(diff / MINUTE_TIME);
-        const hours = Math.floor(diff / HOUR_TIME);
-        if (diff < HOUR_TIME) {
-            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-        } else if (diff < DAY_TIME) {
-            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-        } else if (diff < 5 * DAY_TIME) {
-            const hoursDiff = Math.floor((diff % DAY_TIME) / HOUR_TIME);
-            if (hoursDiff > 0) {
-                return `${days} day${days > 1 ? 's' : ''}, ${hoursDiff} hour${hoursDiff > 1 ? 's' : ''} ago`;
-            } else {
-                return `${days} day${days > 1 ? 's' : ''} ago`;
+        if (now && dt) {
+            const diff = now.getTime() + now.getTimezoneOffset() * 1000 * 60 - dt.getTime();
+            const days = Math.floor(diff / DAY_TIME);
+            const minutes = Math.floor(diff / MINUTE_TIME);
+            const hours = Math.floor(diff / HOUR_TIME);
+            if (diff > 0) {
+                if (diff < MINUTE_TIME) {
+                    return `Seconds ago`;
+                } else if (diff < HOUR_TIME) {
+                    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+                } else if (diff < DAY_TIME) {
+                    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+                } else if (diff < 5 * DAY_TIME) {
+                    const hoursDiff = Math.floor((diff % DAY_TIME) / HOUR_TIME);
+                    if (hoursDiff > 0) {
+                        return `${days} day${days > 1 ? 's' : ''}, ${hoursDiff} hour${hoursDiff > 1 ? 's' : ''} ago`;
+                    } else {
+                        return `${days} day${days > 1 ? 's' : ''} ago`;
+                    }
+                    
+                } else {
+                    return `${days} day${days > 1 ? 's' : ''} ago`;
+                }
             }
             
-        } else {
-            return `${days} day${days > 1 ? 's' : ''} ago`;
         }
-    }, []);
+        return '';
+    }, [props.currentDate]);
 
     const p = props.post;
     const dismissButtonStyle = React.useMemo(() => ({paddingTop: '1px', paddingBottom: '1px', fontSize: '12px'}), []);
@@ -82,6 +91,10 @@ const PostUIFn = function(props: PostProps, ref1: ForwardedRef<any>) {
         },
         id: p.id
     }), [p]);
+
+    const formatter = React.useMemo(() => {
+        return new Intl.NumberFormat("en-IR");
+    }, []);
 
     
     const pressPost = React.useCallback((e) => {
@@ -128,15 +141,15 @@ const PostUIFn = function(props: PostProps, ref1: ForwardedRef<any>) {
     return <div className={'PostContainer ' + animationClassStr} style={hidden ? {visibility: 'hidden'} : {}} onClick={pressPost} onAnimationEnd={animEnds}>
         <div className="Header">
             <span className="Author">{p.author}</span>
-            <span className="CreatedAt">{formatCreated(p.createdTime)}</span>
+            <span className="CreatedAt">{formatCreatedAt(p.createdTime)}</span>
         </div>
         <div className="Body">
             {p.thumbnailUrl ? <img src={p.thumbnailUrl} width={100} height={100} className="Thumbnail" /> : null}
             <span className="Title">{p.title}</span>
         </div>
         <div className="Footer">
-            <Button onClick={pressDismiss} color="default" size={'small'} style={dismissButtonStyle} variant="contained" startIcon={<DeleteIcon />}>${Constants.APP_MESSAGES.DISMISS_BUTTON}</Button>
-            <span className="CommentsNum">{p.numberOfComments} comment/s</span>
+            <Button onClick={pressDismiss} color="default" size={'small'} style={dismissButtonStyle} variant="contained" startIcon={<DeleteIcon />}>{Constants.APP_MESSAGES.DISMISS_BUTTON}</Button>
+            <span className="CommentsNum">{p.numberOfComments > 0 ? formatter.format(p.numberOfComments) + ' comment/s' : 'No comments'}</span>
         </div>
     </div>;
 };

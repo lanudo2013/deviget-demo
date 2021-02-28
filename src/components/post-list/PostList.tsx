@@ -9,7 +9,7 @@ import { AppState } from "../../classes/interfaces/appstate";
 import { Post } from "../../classes/interfaces/post";
 import { PostService } from "../../services/PostService";
 import { requestPosts, retrieveDismissedPosts, retrieveReadPosts, saveDismissPost, saveDismissPosts, saveReadPost, selectPost, updateDoneDimissData, updateRequestPosts } from "../../state/actions";
-import { PostRef, PostUI } from "../post/Post";
+import { PostRef, PostUI } from "../post/PostUI";
 import { Util } from '../util';
 import { Constants } from '../../constants';
 import './PostList.scss';
@@ -19,9 +19,9 @@ interface PostListProps {
 export const PostList = function(props: PostListProps) {
 
   const postService = React.useMemo(() => PostService.getInstance(), []);
-  const [pageSize, setPageSize] = useState<number>(postService.getPageSize() || 25);
+  const [pageSize, setPageSize] = useState<number>(postService.getPageSize() || Constants.POST_LIST_PAGE_SIZES[0]);
   const [ready, setReady] = useState<boolean>(false);
-  const [animating, setAnimating] = useState<boolean>(false);
+  const [slideAnimating, setSlideAnimating] = useState<boolean>(false);
   const [menuAnimating, setMenuAnimating] = useState<boolean>(false);
   const [menuOpened, setMenuOpened] = useState<boolean | undefined>(undefined);
   const [windowDimensions, setWindowDimensions] = useState(Util.getWindowDimensions());
@@ -78,7 +78,7 @@ export const PostList = function(props: PostListProps) {
   const runSlideOutAnimation =React.useCallback(() => {
       let to = 0;
       const promises: Promise<any>[] = [];
-      setAnimating(true);
+      setSlideAnimating(true);
       posts.forEach((x, i) => {
         const postRef = postRefsMap.current[x.id];
         to = Math.min(600, i * 25);
@@ -89,9 +89,9 @@ export const PostList = function(props: PostListProps) {
         dispatch(updateDoneDimissData(undefined));
         dispatch(updateRequestPosts([]));
         postRefsMap.current = {};
-        setAnimating(false);
+        setSlideAnimating(false);
       }).catch(() => {
-        setAnimating(false);
+        setSlideAnimating(false);
       });
   }, [posts, dispatch]);
 
@@ -123,19 +123,15 @@ export const PostList = function(props: PostListProps) {
     const onScroll = React.useCallback(
       debounce((e: any) => {
         const bottomReached = e.target.scrollHeight - e.target.scrollTop <= e.target.clientHeight * 1.1 && e.target.scrollTop > 0;
-        if (bottomReached && !fetchingPosts && !animating) {
+        if (bottomReached && !fetchingPosts && !slideAnimating) {
             dispatch(requestPosts(pageSize));
         }
       }, 350), 
-    [dispatch, pageSize, fetchingPosts, animating]);
-  
-    const currentDate = React.useMemo(() => new Date(), []);
-
-   
+    [dispatch, pageSize, fetchingPosts, slideAnimating]);
   
     const postsEl = React.useMemo(() => {
-      return posts.map(x => <PostUI key={x.id} post={x} currentDate={currentDate} onPressDismiss={onDismissed} onPress={onPress} ref={r => r && (postRefsMap.current[r.id]=r)}></PostUI>);
-    }, [currentDate, posts]);
+      return posts.map(x => <PostUI key={x.id} post={x} currentDate={new Date()} onPressDismiss={onDismissed} onPress={onPress} ref={r => r && (postRefsMap.current[r.id]=r)}></PostUI>);
+    }, [posts]);
 
     const handleChange = React.useCallback((ev: any) => {
         if (ev && ev.target && ev.target.value) {
@@ -151,11 +147,11 @@ export const PostList = function(props: PostListProps) {
     }, [initFetch, pageSize]);
 
     const dismissAllPress = React.useCallback((ev: any) => {
-      if (!animating) {
+      if (!slideAnimating) {
         const ids = posts.map(x => x.id);
         dispatch(saveDismissPosts(ids));
       }
-  }, [animating, posts, dispatch]);
+  }, [slideAnimating, posts, dispatch]);
 
     const onAnimSliderEnd = React.useCallback(() => {
       setMenuAnimating(false);
@@ -167,6 +163,10 @@ export const PostList = function(props: PostListProps) {
         setMenuAnimating(true);
       }
     }, [menuAnimating]);
+
+    const pageSizes = React.useMemo(() => {
+      return Constants.POST_LIST_PAGE_SIZES.map(x => ( <MenuItem value={x}>{x}</MenuItem>));
+    }, []);
 
     return <div className="PostListContainer">
       <IconButton aria-label="delete" className={'MenuButton '} onClick={openMenu}>
@@ -183,9 +183,7 @@ export const PostList = function(props: PostListProps) {
               <MenuItem value="">
                 <em>{Constants.APP_MESSAGES.PAGE_SIZE_PLC}</em>
               </MenuItem>
-              <MenuItem value={25}>25</MenuItem>
-              <MenuItem value={50}>50</MenuItem>
-              <MenuItem value={100}>100</MenuItem>
+              {pageSizes}
             </Select>
             <Button
               variant="contained"
@@ -194,7 +192,7 @@ export const PostList = function(props: PostListProps) {
               endIcon={<RefreshIcon />}
             >
               {Constants.APP_MESSAGES.REFRESH_BUTTON}
-            </Button>
+            </Button> 
             <Button
               variant="contained"
               className="Option DismissButton"

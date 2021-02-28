@@ -8,7 +8,6 @@ import './PostDetail.scss';
 interface PostDetailProps {
 }
 export const PostDetail = function(props: PostDetailProps) {
-    const dispatch = useDispatch();
     const post = useSelector((state: AppState) => state.selectedPost);
 
     const htmlDecode = React.useCallback((input: string) => {
@@ -24,17 +23,17 @@ export const PostDetail = function(props: PostDetailProps) {
         const vData = post.videoData || {} as PostVideo;
         switch(post.postType) {
             case PostType.IMAGE:
-                return <div className="Img-container"><div className="PostPicture" style={{backgroundImage: `url(${post.postUrl})`}}/></div>;
+                return <div className="Body-content"><div className="PostPicture" style={{backgroundImage: `url(${post.postUrl})`}}/></div>;
             case PostType.VIDEO:
-                return <div className="Img-container"><video src={vData.url} className="Video" autoPlay controls/></div>;
+                return <div className="Body-content"><video src={vData.url} className="Video" autoPlay controls/></div>;
             case PostType.LINK:
-                return <div className="Img-container NotCentered"><a href={post.postUrl} className="Url" target="_blank">{post.postUrl}</a></div>;
+                return <div className="Body-content NotCentered"><a href={post.postUrl} className="Url" target="_blank">{post.postUrl}</a></div>;
             case PostType.SELF:
-                return <div className="Img-container NotCentered" dangerouslySetInnerHTML={{__html: htmlDecode(post.postHtml)}}></div>;
+                return <div className="Body-content NotCentered HtmlBody" dangerouslySetInnerHTML={{__html: htmlDecode(post.postHtml)}}></div>;
             default:
                 return null;
         }
-    }, [post]);
+    }, [post, htmlDecode]);
     if (!post) {
         return null;
     }
