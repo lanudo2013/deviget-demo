@@ -114,7 +114,7 @@ describe('Post component', () => {
         domElement = root.find('div.PostListBody > div.PostListOptions');
         expect(domElement.length).toEqual(1);
         expect(domElement.get(0)).toBeTruthy();
-        expect(domElement.children().length).toEqual(3);
+        expect(domElement.children().length).toEqual(4);
         domElement = root.find('div.PostListOptions').find(Select);
         expect(domElement.length).toEqual(1);
         expect(domElement.get(0)).toBeTruthy();
@@ -142,7 +142,7 @@ describe('Post component', () => {
         });
         doBasicChecks(<PostList />);
         expect(postService.init).toHaveBeenCalled();
-        const postsCalls = mockDispatch.mock.calls.filter((x: any) => x[0] && x[0].type && x[0].type === Constants.REDUX_ACTIONS.SUCCESS_REQUEST_POSTS);
+        const postsCalls = mockDispatch.mock.calls.filter((x: any) => x[0] && x[0].type && x[0].type === Constants.REDUX_ACTIONS.UPDATE_POST_LIST);
         expect(postsCalls.length).toEqual(2);
         expect(postsCalls[0][0].payload).toEqual([]);
         expect(postsCalls[1][0].payload).toEqual(p);
@@ -193,7 +193,7 @@ describe('Post component', () => {
         expect(domElements.length).toEqual(3);
         const postUi = domElements.at(0).find('div.PostContainer');
         expect(postUi.get(0)).toBeTruthy();
-        postUi.find(Button).find('button').simulate('click');
+        postUi.find(Button).find('button.DismissButton').simulate('click');
         expect(postService.saveDismissPost).toHaveBeenCalled();
         postService.getDismissedPosts().then(rs => {
             expect(rs.indexOf(p[0].id) >= 0).toBeTruthy();
@@ -218,7 +218,7 @@ describe('Post component', () => {
         expect(postUi.get(0)).toBeTruthy();
         postUi.simulate('click');
         expect(postUi.get(0)).toBeTruthy();
-        postUi.find(Button).find('button').simulate('click');
+        postUi.find(Button).find('button.DismissButton').simulate('click');
         expect(postService.saveDismissPost).toHaveBeenCalled();
         setTimeout(() => {
             postService.getDismissedPosts().then(rs => {
@@ -240,9 +240,9 @@ describe('Post component', () => {
             }
         });
 
-        const dismissAllButton = root.update().find(Button).find('.DismissButton');
+        const dismissAllButton = root.update().find('button.DismissAllButton');
         expect(dismissAllButton.get(0)).toBeTruthy();
-        dismissAllButton.find('button').simulate('click');
+        dismissAllButton.simulate('click');
         expect(postService.saveDismissPosts).toHaveBeenCalled();
         postService.getDismissedPosts().then(rs => {
             expect(rs.length).toEqual(3);
@@ -269,6 +269,53 @@ describe('Post component', () => {
             expect(postService.getPosts).toHaveBeenCalledTimes(2);
             dn();
         }, 500);
+    });
+
+
+    test('Save two first posts and show savedx', (dn) => 
+    {
+        const p = listP;        
+        root = mount(<PostList />, {
+            wrappingComponent: Provider,
+            wrappingComponentProps: {
+                store: globalStoreRef.store
+            }
+        });
+
+        const domElements = root.update().find(PostUI);
+        expect(domElements.length).toEqual(3);
+        let postUi = domElements.at(0).find('button.SaveButton');
+        expect(postUi.get(0)).toBeTruthy();
+        postUi.simulate('click');
+        postUi = domElements.at(2).find('button.SaveButton');
+        expect(postUi.get(0)).toBeTruthy();
+        postUi.simulate('click');
+        expect(postService.savePost).toHaveBeenCalledTimes(2);
+        
+        setTimeout(() => {
+            postService.getSavedPosts().then(rs => {
+                expect(rs).toEqual([p[0], p[2]]);
+                expect(globalStoreRef.store.getState().posts).toEqual([p[0], p[1], p[2]]);
+                expect(globalStoreRef.store.getState().savedPosts).toEqual([p[0], p[2]]);
+                const postButton = root.update().find('div.PostListOptions').find('button.SavedPostsButton');
+                expect(postButton.get(0)).toBeTruthy();
+                postButton.simulate('click');
+                setTimeout(() => {
+                    expect(globalStoreRef.store.getState().showSaved).toEqual(true);
+                    const domElements1 = root.update().find(PostUI);
+                    expect(domElements1.length).toEqual(2);
+                    const foundPosts: Post[] = [];
+                    domElements1.forEach((el, idx) => {
+                        const p = el.getElement().props.post;
+                        foundPosts.push(p);
+                    });
+                    expect(foundPosts).toEqual([p[0], p[2]]);
+                    dn();
+                }, 1000);
+                
+                
+            })
+        });
     });
 
 });

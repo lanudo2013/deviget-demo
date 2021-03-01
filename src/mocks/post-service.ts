@@ -1,5 +1,5 @@
+import { removeSavedPost } from './../state/actions';
 import { Post } from "../classes/interfaces/post";
-import { PostService } from '../services/PostService';
 
 export const buildMockedPromise = (resolved: any, rejected?: any) => {
     const o: any = {
@@ -20,6 +20,7 @@ export const buildMockedPromise = (resolved: any, rejected?: any) => {
 export function createMockedPostServiceObj(): any {
     const readPosts: {[key: string]: any} = {};
     const dismissedPosts: {[key: string]: any}  = {};
+    const savedPosts: {[key: string]: Post}  = {};
     const retValue = {
         init: jest.fn().mockImplementation(() => {
             return buildMockedPromise(null);
@@ -32,6 +33,14 @@ export function createMockedPostServiceObj(): any {
         }),
         saveReadPost: jest.fn().mockImplementation((v: string) => {
             readPosts[v] = 1;
+            return buildMockedPromise(null);
+        }),
+        savePost: jest.fn().mockImplementation((p: Post) => {
+            savedPosts[p.id] = p;
+            return buildMockedPromise(null);
+        }),
+        removeSavedPost: jest.fn().mockImplementation((v: string) => {
+            delete savedPosts[v];
             return buildMockedPromise(null);
         }),
         savePageSize: (v: string) => {
@@ -48,6 +57,13 @@ export function createMockedPostServiceObj(): any {
                 dismissedPosts[v[x]] = 1;
             });
             return buildMockedPromise(null);
+        }),
+        getSavedPosts: jest.fn().mockImplementation((): Promise<Post[]> => {
+            const result: Post[] = [];
+            Object.keys(savedPosts).forEach((x: any) => {
+                result.push(savedPosts[x]);
+            });
+            return buildMockedPromise(result);
         }),
         getPageSize: () => {
             return 25;

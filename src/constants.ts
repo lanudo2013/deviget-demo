@@ -7,7 +7,7 @@ export class Constants {
 
     public static REDUX_ACTIONS = {
         FETCH_REQUEST_POSTS: 'fetch-request-posts',
-        SUCCESS_REQUEST_POSTS: 'success-request-posts',
+        UPDATE_POST_LIST: 'update-post-list',
         FAIL_REQUEST_POSTS: 'fail-request-posts',
 
         DISMISS_POST: 'dismiss-post',
@@ -17,7 +17,9 @@ export class Constants {
         DISMISSED_POSTS_IDS: 'dismissed-posts-ids',
         UPDATE_CURRENT_ERROR: 'update-current-error',
 
-        UPDATE_DONE_DISMISS_DATA: 'update-done-dismiss-data'
+        UPDATE_DONE_DISMISS_DATA: 'update-done-dismiss-data',
+        UPDATE_SAVED_POSTS: 'update-saved-posts',
+        SHOW_SAVED_POSTS: 'show-saved-posts'
     }
 
     public static POST_LIST_PAGE_SIZES = [25, 50, 100];
@@ -29,11 +31,16 @@ export class Constants {
         REFRESH_BUTTON: 'Refresh',
         DISMISS_ALL_BUTTON: 'Dismiss All',
         ERROR_TITLE: 'Error',
-        DISMISS_BUTTON: 'Dismiss Post',
+        DISMISS_BUTTON: 'Dismiss',
+        SAVE_BUTTON: 'Save',
+        REMOVE_BUTTON: 'Remove',
+        SAVED_POSTS: 'Saved',
         LOADING: 'Loading',
         ERROR_DISMISS_POST: 'Unable to dismiss post',
         ERROR_DISMISS_POSTS: 'Unable to dismiss posts',
         ERROR_SAVE_READ_POST: "Unable to save read post state",
+        ERROR_GET_SAVED_POSTS: "Unable to retrieve saved posts",
+        ERROR_SAVE_POST: 'Unable to save post',
         PAGE_SIZE_PLC: "Page Size"
 
     }

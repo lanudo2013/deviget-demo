@@ -1,3 +1,4 @@
+import { showSaved } from './actions';
 import { Constants } from '../constants';
 import { Action } from "redux";
 import { AppState } from "../classes/interfaces/appstate";
@@ -9,12 +10,14 @@ const initialState: AppState = {
     fetchingPosts: false,
     currentError: '',
     postsRead: [],
-    dismissData: undefined
+    dismissData: undefined,
+    savedPosts: [],
+    showSaved: false
 };
 
 export default function(state: AppState = initialState, action: AppAction<any>): AppState {
     switch(action.type) {
-        case Constants.REDUX_ACTIONS.SUCCESS_REQUEST_POSTS:
+        case Constants.REDUX_ACTIONS.UPDATE_POST_LIST:
             return {
                 ...state,
                 posts: action.payload,
@@ -28,7 +31,7 @@ export default function(state: AppState = initialState, action: AppAction<any>):
         case Constants.REDUX_ACTIONS.SELECT_POST:
             return {
                 ...state,
-                selectedPost: state.posts.find(x => x.id === action.payload)
+                selectedPost: state.showSaved ? state.savedPosts.find(x => x.id === action.payload) : state.posts.find(x => x.id === action.payload)
             };
         case Constants.REDUX_ACTIONS.FETCH_REQUEST_POSTS:
             return {
@@ -49,6 +52,16 @@ export default function(state: AppState = initialState, action: AppAction<any>):
             return {
                 ...state,
                 dismissData: action.payload
+            };
+        case Constants.REDUX_ACTIONS.UPDATE_SAVED_POSTS:
+            return {
+                ...state,
+                savedPosts: action.payload
+            };
+        case Constants.REDUX_ACTIONS.SHOW_SAVED_POSTS:
+            return {
+                ...state,
+                showSaved: action.payload
             };
         default:
             return state;

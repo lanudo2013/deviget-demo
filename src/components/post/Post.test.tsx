@@ -53,6 +53,7 @@ describe('Post component', () => {
         return [{
             author: 'author1',
             createdTime: moment(currentDate).add(-4, 'days').add(-6, 'hours').add(+new Date().getTimezoneOffset(), 'minutes').toDate(),
+            createdTimeUtc: 0,
             numberOfComments: 1230,
             id: 'p1',
             postType: PostType.IMAGE,
@@ -70,6 +71,7 @@ describe('Post component', () => {
             postType: PostType.IMAGE,
             thumbnailUrl: '/p2-thumb.jpg',
             title: 'My new post 2',
+            createdTimeUtc: 0,
             subreddit: 'Sub2',
             postUrl: '/p2.jpg',
             postHtml: null
@@ -81,6 +83,7 @@ describe('Post component', () => {
             id: 'p3',
             postType: PostType.LINK,
             thumbnailUrl: undefined,
+            createdTimeUtc: 0,
             title: 'My new post 3',
             subreddit: 'Sub3',
             postUrl: '/p3.jpg',
@@ -93,6 +96,7 @@ describe('Post component', () => {
             id: 'p4',
             postType: PostType.SELF,
             thumbnailUrl: undefined,
+            createdTimeUtc: 0,
             title: 'My new post 4',
             subreddit: 'Sub4',
             postUrl: undefined,
@@ -116,6 +120,10 @@ describe('Post component', () => {
         expect(val).toEqual(PostType.IMAGE);
         val = fromPostType({selftext_html: '<div></div>'});
         expect(val).toEqual(PostType.SELF);
+        val = fromPostType({post_hint: 'rich:video'});
+        expect(val).toEqual(PostType.CONTENT_EMBED);
+      val = fromPostType({secure_media: {oembed: {html: '<div></div>'}}});
+        expect(val).toEqual(PostType.CONTENT_EMBED);
     });
  
     test('Load normal post', () => 
@@ -152,7 +160,7 @@ describe('Post component', () => {
         expect(domElement.get(0)).toBeTruthy();
         expect(domElement.get(0).props.src).toEqual(p.thumbnailUrl);
 
-        let buttonWrapper: ReactWrapper = root.find(Button);
+        let buttonWrapper: ReactWrapper = root.find(Button).find('.DismissButton');
         buttonWrapper.find('button').simulate('click');
     });
 
@@ -186,7 +194,7 @@ describe('Post component', () => {
         expect(domElement.length).toEqual(1);
         expect(domElement.text()).toEqual('Seconds ago');
 
-        let buttonWrapper: ReactWrapper = root.find(Button);
+        let buttonWrapper: ReactWrapper = root.find(Button).find('.DismissButton');
         buttonWrapper.find('button').simulate('click');
 
         expect(onPressDismissFn).toHaveBeenCalled();
@@ -199,7 +207,7 @@ describe('Post component', () => {
         expect(onPressFn).toHaveBeenCalled();
     });
 
-    test('not read post to read post', () => {
+    test('from not read post to read post', () => {
         const p = listP[3];
         const postRef = {current: {fadeOut: null, slideOut: null}} as any;
         const node = <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn} ref={postRef} read={false}/>;
@@ -211,6 +219,24 @@ describe('Post component', () => {
         root.setProps({read: true});
         domElement = root.find('div.Header > div.Header-left > .ReadIcon');
         expect(domElement.get(0)).toBeUndefined();
+    });
 
-    })
+    test('saved post', () => {
+        const p = listP[3];
+        const postRef = {current: {fadeOut: null, slideOut: null}} as any;
+        const node = <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn} ref={postRef} read={false} saved={true} canRemove={true}/>;
+        
+        root = mount(node);
+        let domElement = root.find('div.Footer > div.PostOptions > *');
+        expect(domElement.length).toEqual(1);
+        expect(domElement.find('.RemoveButton').get(0)).toBeTruthy();
+        root.setProps({canRemove: false});
+        domElement = root.update().find('div.Footer > div.PostOptions > *');
+        expect(domElement.length).toEqual(1);
+        expect(domElement.find('.DismissButton').get(0)).toBeTruthy();
+        domElement = root.find('div.Header-right > .SavedIcon');
+        expect(domElement.length).toEqual(1);
+        expect(domElement.get(0)).toBeTruthy();
+
+    });
 });

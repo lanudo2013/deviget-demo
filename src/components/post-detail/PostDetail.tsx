@@ -30,6 +30,8 @@ export const PostDetail = function(props: PostDetailProps) {
                 return <div className="Body-content NotCentered"><a href={post.postUrl} className="Url" target="_blank">{post.postUrl}</a></div>;
             case PostType.SELF:
                 return <div className="Body-content NotCentered HtmlBody" dangerouslySetInnerHTML={{__html: htmlDecode(post.postHtml)}}></div>;
+            case PostType.CONTENT_EMBED:
+                return <div className="Body-content EmbedVideo" dangerouslySetInnerHTML={{__html: htmlDecode(post.embedContent)}}></div>;
             default:
                 return null;
         }

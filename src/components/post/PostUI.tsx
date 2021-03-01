@@ -4,9 +4,13 @@ import moment from  'moment';
 import './Post.scss';
 import { Button } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/CancelOutlined';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import SaveIcon from '@material-ui/icons/SaveOutlined';
 import Icon from '@material-ui/core/Icon';
 import { Constants } from "../../constants";
 import Intl from 'intl';
+import { AnyIfEmpty } from "react-redux";
+import { PostType } from "../../classes/enums/post-type";
 
 const DAY_TIME = 1000 * 60 * 60 * 24;
 const HOUR_TIME = 1000 * 60 * 60;
@@ -16,7 +20,11 @@ interface PostProps {
     post: Post;
     currentDate: Date;
     onPress: (p: Post) => void;
-    read: boolean;
+    onPressSave?: (p: Post) => void;
+    onPressRemoved?: (p: Post) => void;
+    read?: boolean;
+    canRemove?: boolean;
+    saved?: boolean;
     onPressDismiss: (post: Post) => void;
 }
 export interface PostRef {
@@ -63,7 +71,7 @@ const PostUIFn = function(props: PostProps, ref1: ForwardedRef<any>) {
     }, [props.currentDate]);
 
     const p = props.post;
-    const dismissButtonStyle = React.useMemo(() => ({paddingTop: '1px', paddingBottom: '1px', fontSize: '12px'}), []);
+    const dismissButtonStyle = React.useMemo(() => ({paddingTop: '1px', paddingBottom: '1px', fontSize: '12px', marginRight: '5px'}), []);
     useImperativeHandle(ref1, () => ({
         fadeOut: () => {
             if (resolveFadeOutAnim.current) {
@@ -104,6 +112,11 @@ const PostUIFn = function(props: PostProps, ref1: ForwardedRef<any>) {
         props.onPress && props.onPress(p);
     }, [props.onPress, p]);
 
+    const pressSave = React.useCallback((e: any) => {
+        e.stopPropagation();
+        props.onPressSave && props.onPressSave(p);
+    }, [props.onPressSave, p]);
+
     
     const animEnds = React.useCallback((e) => {
         setPressAnimation(false);
@@ -122,7 +135,12 @@ const PostUIFn = function(props: PostProps, ref1: ForwardedRef<any>) {
     const pressDismiss = React.useCallback((e: any) => {
         e.stopPropagation();
         props.onPressDismiss && props.onPressDismiss(p);
-    }, [props.onPressDismiss]);
+    }, [props.onPressDismiss, p]);
+
+    const pressRemoved = React.useCallback((e: any) => {
+        e.stopPropagation();
+        props.onPressRemoved && props.onPressRemoved(p);
+    }, [props.onPressRemoved, p]);
 
     const animationClassStr = React.useMemo(() => {
         if (pressAnimation) {
@@ -136,6 +154,13 @@ const PostUIFn = function(props: PostProps, ref1: ForwardedRef<any>) {
         }
     }, [slideOutAnimation, fadeOutAnimation, pressAnimation]);
 
+    const openFullSizeImage = React.useCallback((e) => {
+        if (p.postType === PostType.IMAGE) {
+            e.stopPropagation();
+            window.open(p.postUrl, '_blank');
+        }
+    }, [p]);
+
     if (!props.post) {
         return null;
     }
@@ -145,15 +170,34 @@ const PostUIFn = function(props: PostProps, ref1: ForwardedRef<any>) {
             <div className="Header-left">
                 {!props.read ? <Icon className="ReadIcon">fiber_manual_record</Icon> : null}
                 <span className="Author" style={props.read ? {left: 0} : null}>{p.author}</span>
-            </div>            
-            <span className="CreatedAt">{formatCreatedAt(p.createdTime)}</span>
+            </div>     
+            <div className="Header-right">
+                {props.saved ? <Icon className="SavedIcon">save</Icon> : null}
+                <span className="CreatedAt">{formatCreatedAt(p.createdTime)}</span>
+            </div>        
+            
         </div>
         <div className="Body">
-            {p.thumbnailUrl ? <img src={p.thumbnailUrl} width={100} height={100} className="Thumbnail" /> : null}
+            {p.thumbnailUrl ? <img src={p.thumbnailUrl} width={100} height={100} onClick={openFullSizeImage} className={'Thumbnail ' + (p.postType === PostType.IMAGE ? 'Clickable' : '') } /> : null}
             <span className="Title">{p.title}</span>
         </div>
         <div className="Footer">
-            <Button onClick={pressDismiss} color="default" size={'small'} style={dismissButtonStyle} variant="contained" startIcon={<DeleteIcon />}>{Constants.APP_MESSAGES.DISMISS_BUTTON}</Button>
+            <div className="PostOptions">
+                {
+                    !props.saved ? 
+                    <>
+                        <Button onClick={pressDismiss} color="default" size={'small'} style={dismissButtonStyle} variant="contained" className="DismissButton" startIcon={<DeleteIcon />}>{Constants.APP_MESSAGES.DISMISS_BUTTON}</Button>
+                        <Button onClick={pressSave} color="default" size={'small'} style={dismissButtonStyle} variant="contained" className="SaveButton" startIcon={<SaveIcon />}>{Constants.APP_MESSAGES.SAVE_BUTTON}</Button>
+                    </> : 
+                    <>
+                        {props.canRemove ? <Button onClick={pressRemoved} color="default" size={'small'} style={dismissButtonStyle} variant="contained" className="RemoveButton" startIcon={<DeleteOutlineIcon />}>{Constants.APP_MESSAGES.REMOVE_BUTTON}</Button> : 
+                            <Button onClick={pressDismiss} color="default" size={'small'} style={dismissButtonStyle} variant="contained" className="DismissButton" startIcon={<DeleteIcon />}>{Constants.APP_MESSAGES.DISMISS_BUTTON}</Button>
+                        }
+                    </>
+                }
+                
+            </div>
+            
             <span className="CommentsNum">{p.numberOfComments > 0 ? formatter.format(p.numberOfComments) + ' comment/s' : 'No comments'}</span>
         </div>
     </div>;

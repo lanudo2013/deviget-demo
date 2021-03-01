@@ -55,12 +55,14 @@ export class PostService {
                     height: val.thumbnail_height
                 } : null,
                 id: val.id,
+                createdTimeUtc: val.created_utc * 1000,
                 subreddit: val.subreddit,
                 postType: fromPostType(val),
                 postHtml: val.selftext_html,
                 postUrl: val.url_overridden_by_dest,
                 createdTime: new Date(val.created_utc * 1000),
                 numberOfComments: val.num_comments,
+                embedContent: val.secure_media && val.secure_media.oembed ? val.secure_media.oembed.html : null,
                 videoData: val.is_video && val.media ? this.getVideoData(val.media) : null
             } as Post;
         }
@@ -81,11 +83,14 @@ export class PostService {
             }, {} as any);
             const result = (list || []).filter((x: any) => dissMap[x.id] !== 1).map((x: any) => this.mapToPost(x));
             if (result.length) {
-                this.lastAuthorId = after;
-                localStorage.setItem('lastAuthorId', this.lastAuthorId || '');
                 collected = [...collected, ...result];
-                if (result.length < limit) {
-                    return this.getPostsAux(limit - result.length, collected);
+                if (after) {
+                    this.lastAuthorId = after;
+                    localStorage.setItem('lastAuthorId', this.lastAuthorId || '');
+                    
+                    if (result.length < limit) {
+                        return this.getPostsAux(limit - result.length, collected);
+                    }
                 }
             } else {
                 if (after && this.lastAuthorId !== after) {
@@ -118,8 +123,20 @@ export class PostService {
         return this.dbService.saveDismissed(id);
     }
 
+    public getSavedPosts(): Promise<Post[]> {
+        return this.dbService.getSavedPosts();
+    }
+
+    public savePost(p: Post): Promise<any> {
+        return this.dbService.savePost(p);
+    }
+
     public saveDismissPosts(list: string[]): Promise<any> {
         return this.dbService.saveDismissPosts(list);
+    }
+
+    public removeSavedPost(id: string): Promise<any> {
+        return this.dbService.removeSavedPost(id);
     }
 
     public saveReadPost(id: string): Promise<any> {

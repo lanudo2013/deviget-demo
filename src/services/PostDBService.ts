@@ -1,3 +1,4 @@
+import { Post } from "../classes/interfaces/post";
 
 export class PostDBService {
     private static instance: PostDBService;
@@ -18,6 +19,8 @@ export class PostDBService {
         const db = (ev.target as any).result as IDBDatabase;
         db.createObjectStore('ReadPosts', { keyPath: 'id' });
         db.createObjectStore('DismissedPosts', { keyPath: 'id' });
+        const objectStore = db.createObjectStore('SavedPosts', { keyPath: 'id' });
+        objectStore.createIndex("jsonData", "jsonData", { unique: false });
         const tx = (ev.target as any).transaction as IDBTransaction;
         tx.oncomplete = () => {
             this.dbInstance = db;
@@ -108,6 +111,63 @@ export class PostDBService {
         
     }
 
+    public savePost(p: Post): Promise<any> {
+        return this.getDBRef().then(() => {
+            return new Promise((res, rej) => {
+                if (this.dbInstance) {
+                    const transaction = this.dbInstance.transaction(["SavedPosts"], "readwrite");
+    
+                    transaction.onerror = function(event) {
+                        rej(event);
+                    };
+                    // create an object store on the transaction
+                    const objectStore = transaction.objectStore("SavedPosts");
+                    // add our newItem object to the object store
+                    const objectStoreRequest = objectStore.put({id: p.id, jsonData: JSON.stringify(p)});
+                    objectStoreRequest.onsuccess = function(event) {
+                        res('');
+                    };
+                    objectStoreRequest.onerror = (ev: Event) => {
+                        rej(ev);
+                    };
+                    return;
+                }
+                rej(new Error('Not created db'));
+            });
+        });
+        
+    }
+
+    public getSavedPosts(): Promise<Post[]> {
+        return this.getDBRef().then(() => {
+            return new Promise((res, rej) => {
+                if (this.dbInstance) {
+                    const transaction = this.dbInstance.transaction(["SavedPosts"], "readonly");
+    
+                    transaction.onerror = function(event) {
+                        rej(event);
+                    };
+                    // create an object store on the transaction
+                    const objectStore = transaction.objectStore("SavedPosts");
+                    const query = objectStore.getAll();
+                    query.onsuccess = function(ev) {
+                        res(((ev.target as any).result || []).map((x: any) => {
+                            const result: Post = JSON.parse(x.jsonData);
+                            result.createdTime = new Date(result.createdTimeUtc);
+                            return result;
+                        }));
+                    };
+                    query.onerror = function(ev) {
+                        rej(ev);
+                    };
+                    
+                    return;
+                }
+                rej(new Error('Not created db'));
+            });
+        });
+    }
+
     public saveDismissPosts(ids: string[]): Promise<any> {
         if (!ids || !ids.length) {
             return Promise.resolve(null);
@@ -174,6 +234,29 @@ export class PostDBService {
             });
         });
         
+    }
+
+    public removeSavedPost(id: string): Promise<any> {
+        return this.getDBRef().then(() => {
+            return new Promise((res, rej) => {
+                if (this.dbInstance) {
+                    const transaction = this.dbInstance.transaction(["SavedPosts"], "readwrite");
+                    transaction.onerror = function(event) {
+                        rej(event);
+                    };
+                    const objectStore = transaction.objectStore("SavedPosts");
+                    const query = objectStore.delete(id);
+                    query.onsuccess = function(ev) {
+                        res(true);
+                    };
+                    query.onerror = function(ev) {
+                        rej(ev);
+                    };
+                    return;
+                }
+                rej(new Error('Not created db'));
+            });
+        });
     }
 
     public getAllReadKeys(): Promise<string[]> {

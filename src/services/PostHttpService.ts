@@ -18,6 +18,7 @@ export class PostHttpService {
             limit > 0 ? `limit=${limit}` : null,
             after ? `after=${after}` : null
         ];
+
         return Promise.race([
             new Promise((resolve, reject) => {
                 setTimeout(() => {

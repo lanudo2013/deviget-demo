@@ -9,6 +9,8 @@ export interface Post {
     title: string;
     thumbnailUrl: string;
     createdTime: Date;
+    createdTimeUtc?: number;
+    embedContent?: string;
     author: string;
     postType: PostType;
     postHtml: string;

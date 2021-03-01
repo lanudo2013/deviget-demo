@@ -26,18 +26,23 @@ exports[`Post component Load normal post 1`] = `
         author1
       </span>
     </div>
-    <span
-      className="CreatedAt"
+    <div
+      className="Header-right"
     >
-      4 days, 6 hours ago
-    </span>
+      <span
+        className="CreatedAt"
+      >
+        4 days, 6 hours ago
+      </span>
+    </div>
   </div>
   <div
     className="Body"
   >
     <img
-      className="Thumbnail"
+      className="Thumbnail Clickable"
       height={100}
+      onClick={[Function]}
       src="/p1-thumb.jpg"
       width={100}
     />
@@ -50,51 +55,102 @@ exports[`Post component Load normal post 1`] = `
   <div
     className="Footer"
   >
-    <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSizeSmall MuiButton-sizeSmall"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      style={
-        Object {
-          "fontSize": "12px",
-          "paddingBottom": "1px",
-          "paddingTop": "1px",
-        }
-      }
-      tabIndex={0}
-      type="button"
+    <div
+      className="PostOptions"
     >
-      <span
-        className="MuiButton-label"
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-contained DismissButton MuiButton-containedSizeSmall MuiButton-sizeSmall"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "fontSize": "12px",
+            "marginRight": "5px",
+            "paddingBottom": "1px",
+            "paddingTop": "1px",
+          }
+        }
+        tabIndex={0}
+        type="button"
       >
         <span
-          className="MuiButton-startIcon MuiButton-iconSizeSmall"
+          className="MuiButton-label"
         >
-          <svg
-            aria-hidden={true}
-            className="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
+          <span
+            className="MuiButton-startIcon MuiButton-iconSizeSmall"
           >
-            <path
-              d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"
-            />
-          </svg>
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"
+              />
+            </svg>
+          </span>
+          Dismiss
         </span>
-        Dismiss Post
-      </span>
-    </button>
+      </button>
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-contained SaveButton MuiButton-containedSizeSmall MuiButton-sizeSmall"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "fontSize": "12px",
+            "marginRight": "5px",
+            "paddingBottom": "1px",
+            "paddingTop": "1px",
+          }
+        }
+        tabIndex={0}
+        type="button"
+      >
+        <span
+          className="MuiButton-label"
+        >
+          <span
+            className="MuiButton-startIcon MuiButton-iconSizeSmall"
+          >
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm2 16H5V5h11.17L19 7.83V19zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM6 6h9v4H6z"
+              />
+            </svg>
+          </span>
+          Save
+        </span>
+      </button>
+    </div>
     <span
       className="CommentsNum"
     >
@@ -130,18 +186,23 @@ exports[`Post component Load normal post 2 1`] = `
         author1
       </span>
     </div>
-    <span
-      className="CreatedAt"
+    <div
+      className="Header-right"
     >
-      10 days ago
-    </span>
+      <span
+        className="CreatedAt"
+      >
+        10 days ago
+      </span>
+    </div>
   </div>
   <div
     className="Body"
   >
     <img
-      className="Thumbnail"
+      className="Thumbnail Clickable"
       height={100}
+      onClick={[Function]}
       src="/p2-thumb.jpg"
       width={100}
     />
@@ -154,54 +215,108 @@ exports[`Post component Load normal post 2 1`] = `
   <div
     className="Footer"
   >
-    <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSizeSmall MuiButton-sizeSmall"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      style={
-        Object {
-          "fontSize": "12px",
-          "paddingBottom": "1px",
-          "paddingTop": "1px",
-        }
-      }
-      tabIndex={0}
-      type="button"
+    <div
+      className="PostOptions"
     >
-      <span
-        className="MuiButton-label"
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-contained DismissButton MuiButton-containedSizeSmall MuiButton-sizeSmall"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "fontSize": "12px",
+            "marginRight": "5px",
+            "paddingBottom": "1px",
+            "paddingTop": "1px",
+          }
+        }
+        tabIndex={0}
+        type="button"
       >
         <span
-          className="MuiButton-startIcon MuiButton-iconSizeSmall"
+          className="MuiButton-label"
         >
-          <svg
-            aria-hidden={true}
-            className="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
+          <span
+            className="MuiButton-startIcon MuiButton-iconSizeSmall"
           >
-            <path
-              d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"
-            />
-          </svg>
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"
+              />
+            </svg>
+          </span>
+          Dismiss
         </span>
-        Dismiss Post
-      </span>
-      <span
-        className="MuiTouchRipple-root"
-      />
-    </button>
+        <span
+          className="MuiTouchRipple-root"
+        />
+      </button>
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-contained SaveButton MuiButton-containedSizeSmall MuiButton-sizeSmall"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "fontSize": "12px",
+            "marginRight": "5px",
+            "paddingBottom": "1px",
+            "paddingTop": "1px",
+          }
+        }
+        tabIndex={0}
+        type="button"
+      >
+        <span
+          className="MuiButton-label"
+        >
+          <span
+            className="MuiButton-startIcon MuiButton-iconSizeSmall"
+          >
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm2 16H5V5h11.17L19 7.83V19zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM6 6h9v4H6z"
+              />
+            </svg>
+          </span>
+          Save
+        </span>
+        <span
+          className="MuiTouchRipple-root"
+        />
+      </button>
+    </div>
     <span
       className="CommentsNum"
     >
@@ -237,11 +352,15 @@ exports[`Post component Load post without picture 1`] = `
         author2
       </span>
     </div>
-    <span
-      className="CreatedAt"
+    <div
+      className="Header-right"
     >
-      2 minutes ago
-    </span>
+      <span
+        className="CreatedAt"
+      >
+        2 minutes ago
+      </span>
+    </div>
   </div>
   <div
     className="Body"
@@ -255,51 +374,102 @@ exports[`Post component Load post without picture 1`] = `
   <div
     className="Footer"
   >
-    <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSizeSmall MuiButton-sizeSmall"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      style={
-        Object {
-          "fontSize": "12px",
-          "paddingBottom": "1px",
-          "paddingTop": "1px",
-        }
-      }
-      tabIndex={0}
-      type="button"
+    <div
+      className="PostOptions"
     >
-      <span
-        className="MuiButton-label"
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-contained DismissButton MuiButton-containedSizeSmall MuiButton-sizeSmall"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "fontSize": "12px",
+            "marginRight": "5px",
+            "paddingBottom": "1px",
+            "paddingTop": "1px",
+          }
+        }
+        tabIndex={0}
+        type="button"
       >
         <span
-          className="MuiButton-startIcon MuiButton-iconSizeSmall"
+          className="MuiButton-label"
         >
-          <svg
-            aria-hidden={true}
-            className="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
+          <span
+            className="MuiButton-startIcon MuiButton-iconSizeSmall"
           >
-            <path
-              d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"
-            />
-          </svg>
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"
+              />
+            </svg>
+          </span>
+          Dismiss
         </span>
-        Dismiss Post
-      </span>
-    </button>
+      </button>
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-contained SaveButton MuiButton-containedSizeSmall MuiButton-sizeSmall"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "fontSize": "12px",
+            "marginRight": "5px",
+            "paddingBottom": "1px",
+            "paddingTop": "1px",
+          }
+        }
+        tabIndex={0}
+        type="button"
+      >
+        <span
+          className="MuiButton-label"
+        >
+          <span
+            className="MuiButton-startIcon MuiButton-iconSizeSmall"
+          >
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm2 16H5V5h11.17L19 7.83V19zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM6 6h9v4H6z"
+              />
+            </svg>
+          </span>
+          Save
+        </span>
+      </button>
+    </div>
     <span
       className="CommentsNum"
     >
@@ -335,11 +505,15 @@ exports[`Post component Press callbacks 1`] = `
         author3
       </span>
     </div>
-    <span
-      className="CreatedAt"
+    <div
+      className="Header-right"
     >
-      Seconds ago
-    </span>
+      <span
+        className="CreatedAt"
+      >
+        Seconds ago
+      </span>
+    </div>
   </div>
   <div
     className="Body"
@@ -353,54 +527,108 @@ exports[`Post component Press callbacks 1`] = `
   <div
     className="Footer"
   >
-    <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSizeSmall MuiButton-sizeSmall"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      style={
-        Object {
-          "fontSize": "12px",
-          "paddingBottom": "1px",
-          "paddingTop": "1px",
-        }
-      }
-      tabIndex={0}
-      type="button"
+    <div
+      className="PostOptions"
     >
-      <span
-        className="MuiButton-label"
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-contained DismissButton MuiButton-containedSizeSmall MuiButton-sizeSmall"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "fontSize": "12px",
+            "marginRight": "5px",
+            "paddingBottom": "1px",
+            "paddingTop": "1px",
+          }
+        }
+        tabIndex={0}
+        type="button"
       >
         <span
-          className="MuiButton-startIcon MuiButton-iconSizeSmall"
+          className="MuiButton-label"
         >
-          <svg
-            aria-hidden={true}
-            className="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
+          <span
+            className="MuiButton-startIcon MuiButton-iconSizeSmall"
           >
-            <path
-              d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"
-            />
-          </svg>
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"
+              />
+            </svg>
+          </span>
+          Dismiss
         </span>
-        Dismiss Post
-      </span>
-      <span
-        className="MuiTouchRipple-root"
-      />
-    </button>
+        <span
+          className="MuiTouchRipple-root"
+        />
+      </button>
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-contained SaveButton MuiButton-containedSizeSmall MuiButton-sizeSmall"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "fontSize": "12px",
+            "marginRight": "5px",
+            "paddingBottom": "1px",
+            "paddingTop": "1px",
+          }
+        }
+        tabIndex={0}
+        type="button"
+      >
+        <span
+          className="MuiButton-label"
+        >
+          <span
+            className="MuiButton-startIcon MuiButton-iconSizeSmall"
+          >
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm2 16H5V5h11.17L19 7.83V19zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM6 6h9v4H6z"
+              />
+            </svg>
+          </span>
+          Save
+        </span>
+        <span
+          className="MuiTouchRipple-root"
+        />
+      </button>
+    </div>
     <span
       className="CommentsNum"
     >

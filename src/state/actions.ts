@@ -9,11 +9,14 @@ import { Constants } from './../constants';
 
 
 export const fetchRequestPosts = () => ({type: Constants.REDUX_ACTIONS.FETCH_REQUEST_POSTS, payload: null} as AppAction<null>);
-export const updateRequestPosts = (list: Post[]) => ({type: Constants.REDUX_ACTIONS.SUCCESS_REQUEST_POSTS, payload: list} as AppAction<Post[]>);
+export const updatePostsList = (list: Post[]) => ({type: Constants.REDUX_ACTIONS.UPDATE_POST_LIST, payload: list} as AppAction<Post[]>);
+export const updateSavedPostsList = (list: Post[]) => ({type: Constants.REDUX_ACTIONS.UPDATE_SAVED_POSTS, payload: list} as AppAction<Post[]>);
 export const failRequestPosts = (err: Error | ResponseDto<any>) => ({type: Constants.REDUX_ACTIONS.FAIL_REQUEST_POSTS, payload: err} as AppAction<Error | ResponseDto<any>>);
 
 export const readPostsList = (v: string[]) => ({type: Constants.REDUX_ACTIONS.READ_POSTS_IDS, payload: v} as AppAction<string[]>);
 export const dismissedPostsList = (v: string[]) => ({type: Constants.REDUX_ACTIONS.DISMISSED_POSTS_IDS, payload: v} as AppAction<string[]>);
+export const showSaved = (v: boolean) => ({type: Constants.REDUX_ACTIONS.SHOW_SAVED_POSTS, payload: v} as AppAction<boolean>);
+
 
 export const selectPost = (v: Post) => ({type: Constants.REDUX_ACTIONS.SELECT_POST, payload: v ? v.id : null} as AppAction<string>);
 export const updateCurrentError = (v: string) => ({type: Constants.REDUX_ACTIONS.UPDATE_CURRENT_ERROR, payload: v} as AppAction<string>);
@@ -27,7 +30,7 @@ export const requestPosts = (limit: number, reset?: boolean) => {
         const { posts } = getState() as AppState;
         const postService = PostService.getInstance();
         return postService.getPosts(limit, reset).then((list) => {
-            dispatch(updateRequestPosts(posts.concat(list)));
+            dispatch(updatePostsList(posts.concat(list)));
         }).catch((err: Error | ResponseDto<any>) => {
             dispatch(failRequestPosts(err));
             dispatch(updateCurrentError(err && err.message ? err.message : Constants.APP_MESSAGES.ERROR_GET_POSTS));
@@ -83,10 +86,50 @@ export const saveReadPost = (id: string) => {
             postService.getReadPosts().then((list) => {
                 dispatch(readPostsList(list));
             });
-            dispatch(updateRequestPosts([...posts]));
+            dispatch(updatePostsList([...posts]));
         }).catch(err => {
             const { posts } = getState() as AppState;
-            dispatch(updateRequestPosts([...posts]));
+            dispatch(updatePostsList([...posts]));
+            dispatch(updateCurrentError(Constants.APP_MESSAGES.ERROR_SAVE_READ_POST));
+        });
+    };
+};
+
+
+
+export const loadSavedPosts = () => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        const postService = PostService.getInstance();
+        return postService.getSavedPosts().then((ps: Post[]) => {
+            dispatch(updateSavedPostsList(ps));
+        }).catch((err) => {
+            console.error(err);
+            dispatch(updateCurrentError(Constants.APP_MESSAGES.ERROR_GET_SAVED_POSTS));
+        });
+    };
+};
+
+export const savePost = (p: Post) => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        const postService = PostService.getInstance();
+        return postService.savePost(p).then(() => {
+            return postService.getSavedPosts().then((ps: Post[]) => {
+                dispatch(updateSavedPostsList(ps));
+            });
+        }).catch(err => {
+            const { savedPosts } = getState() as AppState;
+            dispatch(updateSavedPostsList([...savedPosts]));
+            dispatch(updateCurrentError(Constants.APP_MESSAGES.ERROR_SAVE_READ_POST));
+        });
+    };
+};
+
+export const removeSavedPost = (id: string) => {
+    return (dispatch: Dispatch, getState: () => AppState) => {
+        const postService = PostService.getInstance();
+        return postService.removeSavedPost(id).then(() => {
+            dispatch(updateDoneDimissData({type: 'fadeOut', id}));
+        }).catch(() => {
             dispatch(updateCurrentError(Constants.APP_MESSAGES.ERROR_SAVE_READ_POST));
         });
     };

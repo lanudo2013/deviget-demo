@@ -1,5 +1,5 @@
 export enum PostType {
-    IMAGE, VIDEO, LINK, SELF
+    IMAGE, VIDEO, LINK, SELF, CONTENT_EMBED
 }
 
 export function fromPostType(val: any) : PostType | null {
@@ -11,6 +11,8 @@ export function fromPostType(val: any) : PostType | null {
                     return PostType.IMAGE;
                 case 'hosted:video':
                     return PostType.VIDEO;
+                case 'rich:video':
+                    return PostType.CONTENT_EMBED;
                 case 'self':
                     return PostType.SELF;
                 case 'link':
@@ -22,6 +24,8 @@ export function fromPostType(val: any) : PostType | null {
             return PostType.SELF;
         } else if (val.is_video) {
             return PostType.VIDEO;
+        } else if (val.secure_media && val.secure_media.oembed && val.secure_media.oembed.html) {
+            return PostType.CONTENT_EMBED;
         }
         
     }
