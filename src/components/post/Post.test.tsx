@@ -1,8 +1,9 @@
-import { PostType } from '../../classes/enums/post-type';
+import { fromPostType, PostType } from '../../classes/enums/post-type';
 import { Post } from '../../classes/interfaces/post';
 import { mount, ReactWrapper } from "enzyme";
 import moment from 'moment';
 import React, { useRef } from 'react';
+import renderer from 'react-test-renderer';
 import { PostUI } from './PostUI';
 import { Button } from '@material-ui/core';
 import { Constants } from '../../constants';
@@ -14,7 +15,10 @@ describe('Post component', () => {
     let onPressDismissFn: (p: Post) => void;
     let currentDate = new Date();
 
-    function doBasicChecks() {
+    function doBasicChecks(node: any) {
+        const tree = renderer.create(node).toJSON();
+        expect(tree).toMatchSnapshot();
+
         let domElement: ReactWrapper = root.find('div.PostContainer');
         expect(domElement.length).toEqual(1);
         expect(domElement.get(0)).toBeTruthy();
@@ -28,18 +32,6 @@ describe('Post component', () => {
         expect(domElement.length).toEqual(1);
         expect(domElement.get(0)).toBeTruthy();
 
-        domElement = root.find('div.Footer').find(Button);
-        expect(domElement.length).toEqual(1);
-        expect(domElement.get(0)).toBeTruthy();
-        expect(domElement.text()).toEqual(Constants.APP_MESSAGES.DISMISS_BUTTON);
-
-        root.find('div.Footer').find('div.CommentsNum');
-        expect(domElement.length).toEqual(1);
-        expect(domElement.get(0)).toBeTruthy();
-
-        root.find('div.Header').find('div.CreatedAt');
-        expect(domElement.length).toEqual(1);
-        expect(domElement.get(0)).toBeTruthy();
     }
 
     function checkAuthorTitleComments(p: Post, expNumCommentsText: string) {
@@ -114,11 +106,23 @@ describe('Post component', () => {
         onPressDismissFn = jest.fn();
         dn();
     });
+
+    test('Select post type', () => {
+        let val = fromPostType({post_hint: 'image'});
+        expect(val).toEqual(PostType.IMAGE);
+        val = fromPostType({is_video: true});
+        expect(val).toEqual(PostType.VIDEO);
+        val = fromPostType({});
+        expect(val).toEqual(PostType.IMAGE);
+        val = fromPostType({selftext_html: '<div></div>'});
+        expect(val).toEqual(PostType.SELF);
+    });
  
     test('Load normal post', () => 
     {
-        root = mount(<PostUI post={listP[0]} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn} />);
-        doBasicChecks();
+        const node = <PostUI post={listP[0]} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn}  read={false}/>;
+        root = mount(node);
+        doBasicChecks(node);
         checkAuthorTitleComments(listP[0], '1,230 comment/s');
 
         let domElement = root.find('span.CreatedAt');
@@ -134,8 +138,9 @@ describe('Post component', () => {
     test('Load normal post 2', () => 
     {
         const p = listP[1];
-        root = mount(<PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn}/>);
-        doBasicChecks();
+        const node = <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn}  read={false}/>;
+        root = mount(node);
+        doBasicChecks(node);
         checkAuthorTitleComments(p, '878 comment/s');
 
         let domElement = root.find('span.CreatedAt');
@@ -154,8 +159,9 @@ describe('Post component', () => {
     test('Load post without picture', () => 
     {
         const p = listP[2];
-        root = mount(<PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn}/>);
-        doBasicChecks();
+        const node = <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn}  read={false}/>;
+        root = mount(node);
+        doBasicChecks(node);
         checkAuthorTitleComments(p, '900 comment/s');
 
         let domElement = root.find('span.CreatedAt');
@@ -170,8 +176,10 @@ describe('Post component', () => {
     {
         const p = listP[3];
         const postRef = {current: {fadeOut: null, slideOut: null}} as any;
-        root = mount(<PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn} ref={postRef}/>);
-        doBasicChecks();
+        const node = <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn} ref={postRef} read={false}/>;
+        
+        root = mount(node);
+        doBasicChecks(node);
         checkAuthorTitleComments(p, 'No comments');
 
         let domElement = root.find('span.CreatedAt');
@@ -190,4 +198,19 @@ describe('Post component', () => {
 
         expect(onPressFn).toHaveBeenCalled();
     });
+
+    test('not read post to read post', () => {
+        const p = listP[3];
+        const postRef = {current: {fadeOut: null, slideOut: null}} as any;
+        const node = <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn} ref={postRef} read={false}/>;
+        
+        root = mount(node);
+        let domElement = root.find('div.Header > div.Header-left > .ReadIcon');
+        expect(domElement.length).toEqual(1);
+        expect(domElement.get(0)).toBeTruthy();
+        root.setProps({read: true});
+        domElement = root.find('div.Header > div.Header-left > .ReadIcon');
+        expect(domElement.get(0)).toBeUndefined();
+
+    })
 });

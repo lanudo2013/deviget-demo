@@ -18,7 +18,9 @@ interface PostListProps {
 }
 export const PostList = function(props: PostListProps) {
 
-  const postService = React.useMemo(() => PostService.getInstance(), []);
+  const postService = React.useMemo(() => {
+    return PostService.getInstance();
+  }, []);
   const [pageSize, setPageSize] = useState<number>(postService.getPageSize() || Constants.POST_LIST_PAGE_SIZES[0]);
   const [ready, setReady] = useState<boolean>(false);
   const [slideAnimating, setSlideAnimating] = useState<boolean>(false);
@@ -39,6 +41,8 @@ export const PostList = function(props: PostListProps) {
 
 
   const dispatch = useDispatch();
+  const postsRead = useSelector((state: AppState) => state.postsRead);
+  const selectedPost = useSelector((state: AppState) => state.selectedPost);
   const initFetch = React.useCallback((oSize: number) => {
     postRefsMap.current = {};
     dispatch(updateRequestPosts([]));
@@ -100,13 +104,18 @@ export const PostList = function(props: PostListProps) {
   useEffect(() => {
     if (posts.length === Object.keys(postRefsMap.current).length && dismissData) {
         if (dismissData.type === 'fadeOut') {
+          if (selectedPost && selectedPost.id === dismissData.id) {
+            dispatch(selectPost(null));
+          }
+          
           const postToDismiss = postRefsMap.current[dismissData.id || ''];
           runFadeOutAnimation(postToDismiss);
         } else if (dismissData.type === 'slideOut') {
+           dispatch(selectPost(null));
           runSlideOutAnimation();
         }
     }
-  }, [dismissData, runSlideOutAnimation, runFadeOutAnimation, posts]);
+  }, [dismissData, runSlideOutAnimation, runFadeOutAnimation, posts, selectedPost]);
 
   const onDismissed = React.useCallback((p: Post) => {
       dispatch(saveDismissPost(p.id));
@@ -128,10 +137,17 @@ export const PostList = function(props: PostListProps) {
         }
       }, 350), 
     [dispatch, pageSize, fetchingPosts, slideAnimating]);
+
+    const postsReadMap = React.useMemo(() => {
+      return postsRead.reduce((prev, current: string) => {
+          (prev as any)[current] = 1;
+          return prev;
+      }, {} as {[key: string]: string});
+    }, [postsRead]);
   
     const postsEl = React.useMemo(() => {
-      return posts.map(x => <PostUI key={x.id} post={x} currentDate={new Date()} onPressDismiss={onDismissed} onPress={onPress} ref={r => r && (postRefsMap.current[r.id]=r)}></PostUI>);
-    }, [posts]);
+      return posts.map(x => <PostUI key={x.id} post={x} currentDate={new Date()} read={postsReadMap[x.id] !== undefined} onPressDismiss={onDismissed} onPress={onPress} ref={r => r && (postRefsMap.current[r.id]=r)}></PostUI>);
+    }, [posts, postsReadMap]);
 
     const handleChange = React.useCallback((ev: any) => {
         if (ev && ev.target && ev.target.value) {
@@ -165,7 +181,7 @@ export const PostList = function(props: PostListProps) {
     }, [menuAnimating]);
 
     const pageSizes = React.useMemo(() => {
-      return Constants.POST_LIST_PAGE_SIZES.map(x => ( <MenuItem value={x}>{x}</MenuItem>));
+      return Constants.POST_LIST_PAGE_SIZES.map(x => ( <MenuItem value={x} key={x}>{x}</MenuItem>));
     }, []);
 
     return <div className="PostListContainer">

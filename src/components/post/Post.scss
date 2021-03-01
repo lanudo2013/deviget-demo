@@ -15,11 +15,27 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        .Author {
-            font-size: 20px;
-            font-weight: bold;
-            line-height: 10px;
+        margin-bottom: 5px;
+        .Header-left {
+            display: flex;
+            align-items: center;
+            position: relative;
+            .MuiIcon-root {
+                font-size: 1em;
+                position: absolute;
+                top: 1px;
+                color: rgb(66, 106, 116);
+            }
+            .Author {
+                position: absolute;
+                left: 0.9em;
+                font-size: 20px;
+                font-weight: bold;
+                line-height: 10px;
+            }
         }
+        
+        
         .CreatedAt {
             font-size: 0.75em;
         }

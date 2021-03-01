@@ -5,6 +5,7 @@ import moment from 'moment';
 import React, { useRef } from 'react';
 import { useSelector, useDispatch, Provider } from 'react-redux'; 
 import { PostDetail } from './PostDetail';
+import renderer from 'react-test-renderer';
 import { AppState } from '../../classes/interfaces/appstate';
 import rootReducer from '../../state/rootReducer';
 import { createStore } from 'redux';
@@ -20,7 +21,10 @@ describe('Post component', () => {
     let listP: Post[];
     let currentDate = new Date();
 
-    function doBasicChecks() {
+    function doBasicChecks(node: any) {
+        const tree = renderer.create(node).toJSON();
+        expect(tree).toMatchSnapshot();
+
         let domElement: ReactWrapper = root.update().find(PostDetail).find('div.PostDetailContainer');
         expect(domElement.length).toEqual(1);
         expect(domElement.get(0)).toBeTruthy();
@@ -30,7 +34,6 @@ describe('Post component', () => {
         domElement = root.find('div.PostDetailContainer > div.InnerContainer');
         expect(domElement.length).toEqual(1);
         expect(domElement.get(0)).toBeTruthy();
-
     }
 
     function htmlDecode(input: string){
@@ -96,9 +99,7 @@ describe('Post component', () => {
     }
 
     beforeEach((dn) => {
-        
         listP = createPosts();
-
         dn();
     });
  
@@ -113,7 +114,7 @@ describe('Post component', () => {
                 store: createStore(rootReducer)
             }
         });
-        doBasicChecks();
+        doBasicChecks(<PostDetail />);
         let domElement: ReactWrapper = root.find('div.PostDetailContainer > div.AuthorContainer');
         expect(domElement.text()).toEqual(p.author);
         domElement = root.find('div.InnerContainer > span.Title');
@@ -138,7 +139,7 @@ describe('Post component', () => {
                 store: createStore(rootReducer)
             }
         });
-        doBasicChecks();
+        doBasicChecks(<PostDetail />);
         let domElement: ReactWrapper = root.find('div.PostDetailContainer > div.AuthorContainer');
         expect(domElement.text()).toEqual(p.author);
         domElement = root.find('div.InnerContainer > span.Title');
@@ -161,7 +162,7 @@ describe('Post component', () => {
                 store: createStore(rootReducer)
             }
         });
-        doBasicChecks();
+        doBasicChecks(<PostDetail />);
 
         const domElement = root.find('div.Body > div.Body-content > a.Url');
         expect(domElement.get(0)).toBeTruthy();
@@ -179,7 +180,7 @@ describe('Post component', () => {
                 store: createStore(rootReducer)
             }
         });
-        doBasicChecks();
+        doBasicChecks(<PostDetail />);
 
         const domElement = root.find('div.Body > div.Body-content.HtmlBody');
         expect(domElement.get(0)).toBeTruthy();

@@ -1,0 +1,178 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Post component Show embbed html post detail 1`] = `
+<div
+  className="PostDetailContainer"
+>
+  <div
+    className="AuthorContainer"
+  >
+    <span
+      className="Author"
+    >
+      author3
+    </span>
+  </div>
+  <div
+    className="InnerContainer"
+    style={Object {}}
+  >
+    <span
+      className="Title"
+      style={Object {}}
+    >
+      My new post 4
+    </span>
+    <div
+      className="Body"
+    >
+      <div
+        className="Body-content NotCentered HtmlBody"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "<iframe class=\\"embedly-embed\\" src=\\"https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fgfycat.com%2Fifr%2Fanotherreddachshund&display_name=Gfycat&url=https%3A%2F%2Fgfycat.com%2Fanotherreddachshund&image=https%3A%2F%2Fthumbs.gfycat.com%2FAnotherRedDachshund-size_restricted.gif&key=ed8fa8699ce04833838e66ce79ba05f1&type=text%2Fhtml&schema=gfycat\\" width=\\"460\\" height=\\"574\\" scrolling=\\"no\\" title=\\"Gfycat embed\\" frameborder=\\"0\\" allow=\\"autoplay; fullscreen\\" allowfullscreen=\\"true\\"></iframe>",
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Post component Show image post detail 1`] = `
+<div
+  className="PostDetailContainer"
+>
+  <div
+    className="AuthorContainer"
+  >
+    <span
+      className="Author"
+    >
+      author1
+    </span>
+  </div>
+  <div
+    className="InnerContainer"
+    style={
+      Object {
+        "maxHeight": "calc(100% - 6em)",
+      }
+    }
+  >
+    <span
+      className="Title"
+      style={Object {}}
+    >
+      My new post 1
+    </span>
+    <div
+      className="Body"
+    >
+      <div
+        className="Body-content"
+      >
+        <div
+          className="PostPicture"
+          style={
+            Object {
+              "backgroundImage": "url(/p1.jpg)",
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Post component Show link post detail 1`] = `
+<div
+  className="PostDetailContainer"
+>
+  <div
+    className="AuthorContainer"
+  >
+    <span
+      className="Author"
+    >
+      author2
+    </span>
+  </div>
+  <div
+    className="InnerContainer"
+    style={
+      Object {
+        "maxHeight": "calc(100% - 6em)",
+      }
+    }
+  >
+    <span
+      className="Title"
+      style={Object {}}
+    >
+      My new post 3
+    </span>
+    <div
+      className="Body"
+    >
+      <div
+        className="Body-content NotCentered"
+      >
+        <a
+          className="Url"
+          href="http://www.google.com"
+          target="_blank"
+        >
+          http://www.google.com
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Post component Show video post detail 1`] = `
+<div
+  className="PostDetailContainer"
+>
+  <div
+    className="AuthorContainer"
+  >
+    <span
+      className="Author"
+    >
+      author1
+    </span>
+  </div>
+  <div
+    className="InnerContainer"
+    style={
+      Object {
+        "maxHeight": "calc(100% - 6em)",
+      }
+    }
+  >
+    <span
+      className="Title"
+      style={Object {}}
+    >
+      My new post 2
+    </span>
+    <div
+      className="Body"
+    >
+      <div
+        className="Body-content"
+      >
+        <video
+          autoPlay={true}
+          className="Video"
+          controls={true}
+          src="http://myurl.com/video.mpg"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

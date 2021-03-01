@@ -10,6 +10,9 @@ module.exports = {
     moduleNameMapper: {
         "\\.(css|scss)$": "identity-obj-proxy"
     },
+    collectCoverage: true,
+    coverageReporters: ["json", "html"],
+    coverageDirectory: './coverage',
     setupFiles: ["./src/setup-test.js"],
     globals: {
       "API": "{}"

@@ -13,7 +13,7 @@ export class PostService {
     private dbService: PostDBService;
     private lastAuthorId: string | null = '';
 
-    protected constructor() {
+    public constructor() {
         this.httpService = PostHttpService.getInstance();
         this.dbService = PostDBService.getInstance();
         /*setTimeout(() => {

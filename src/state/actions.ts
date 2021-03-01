@@ -7,7 +7,6 @@ import { ResponseDto } from '../classes/response';
 import { PostService } from '../services/PostService';
 import { Constants } from './../constants';
 
-const postService = PostService.getInstance();
 
 export const fetchRequestPosts = () => ({type: Constants.REDUX_ACTIONS.FETCH_REQUEST_POSTS, payload: null} as AppAction<null>);
 export const updateRequestPosts = (list: Post[]) => ({type: Constants.REDUX_ACTIONS.SUCCESS_REQUEST_POSTS, payload: list} as AppAction<Post[]>);
@@ -16,7 +15,7 @@ export const failRequestPosts = (err: Error | ResponseDto<any>) => ({type: Const
 export const readPostsList = (v: string[]) => ({type: Constants.REDUX_ACTIONS.READ_POSTS_IDS, payload: v} as AppAction<string[]>);
 export const dismissedPostsList = (v: string[]) => ({type: Constants.REDUX_ACTIONS.DISMISSED_POSTS_IDS, payload: v} as AppAction<string[]>);
 
-export const selectPost = (v: Post) => ({type: Constants.REDUX_ACTIONS.SELECT_POST, payload: v.id} as AppAction<string>);
+export const selectPost = (v: Post) => ({type: Constants.REDUX_ACTIONS.SELECT_POST, payload: v ? v.id : null} as AppAction<string>);
 export const updateCurrentError = (v: string) => ({type: Constants.REDUX_ACTIONS.UPDATE_CURRENT_ERROR, payload: v} as AppAction<string>);
 
 export const updateDoneDimissData = (v: DismissData | undefined) => ({type: Constants.REDUX_ACTIONS.UPDATE_DONE_DISMISS_DATA, payload: v} as AppAction<DismissData | undefined>);
@@ -26,6 +25,7 @@ export const requestPosts = (limit: number, reset?: boolean) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
         dispatch(fetchRequestPosts());
         const { posts } = getState() as AppState;
+        const postService = PostService.getInstance();
         return postService.getPosts(limit, reset).then((list) => {
             dispatch(updateRequestPosts(posts.concat(list)));
         }).catch((err: Error | ResponseDto<any>) => {
@@ -37,6 +37,7 @@ export const requestPosts = (limit: number, reset?: boolean) => {
 
 export const retrieveReadPosts = () => {
     return (dispatch: Dispatch) => {
+        const postService = PostService.getInstance();
         return postService.getReadPosts().then((list) => {
             dispatch(readPostsList(list));
         });
@@ -45,6 +46,7 @@ export const retrieveReadPosts = () => {
 
 export const retrieveDismissedPosts = () => {
     return (dispatch: Dispatch) => {
+        const postService = PostService.getInstance();
         return postService.getDismissedPosts().then((list) => {
             dispatch(dismissedPostsList(list));
         });
@@ -53,6 +55,7 @@ export const retrieveDismissedPosts = () => {
 
 export const saveDismissPost = (id: string) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
+        const postService = PostService.getInstance();
         return postService.saveDismissPost(id).then(() => {
             dispatch(updateDoneDimissData({type: 'fadeOut', id}));
         }).catch(err => {
@@ -63,6 +66,7 @@ export const saveDismissPost = (id: string) => {
 
 export const saveDismissPosts = (ids: string[]) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
+        const postService = PostService.getInstance();
         return postService.saveDismissPosts(ids).then(() => {
             dispatch(updateDoneDimissData({type: 'slideOut'}));
         }).catch(err => {
@@ -73,8 +77,12 @@ export const saveDismissPosts = (ids: string[]) => {
 
 export const saveReadPost = (id: string) => {
     return (dispatch: Dispatch, getState: () => AppState) => {
+        const postService = PostService.getInstance();
         return postService.saveReadPost(id).then(() => {
             const { posts } = getState() as AppState;
+            postService.getReadPosts().then((list) => {
+                dispatch(readPostsList(list));
+            });
             dispatch(updateRequestPosts([...posts]));
         }).catch(err => {
             const { posts } = getState() as AppState;

@@ -20,6 +20,8 @@ export function fromPostType(val: any) : PostType | null {
             }
         } else if (val.selftext_html) {
             return PostType.SELF;
+        } else if (val.is_video) {
+            return PostType.VIDEO;
         }
         
     }

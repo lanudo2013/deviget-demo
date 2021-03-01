@@ -4,6 +4,7 @@ import moment from  'moment';
 import './Post.scss';
 import { Button } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/CancelOutlined';
+import Icon from '@material-ui/core/Icon';
 import { Constants } from "../../constants";
 import Intl from 'intl';
 
@@ -15,6 +16,7 @@ interface PostProps {
     post: Post;
     currentDate: Date;
     onPress: (p: Post) => void;
+    read: boolean;
     onPressDismiss: (post: Post) => void;
 }
 export interface PostRef {
@@ -140,7 +142,10 @@ const PostUIFn = function(props: PostProps, ref1: ForwardedRef<any>) {
 
     return <div className={'PostContainer ' + animationClassStr} style={hidden ? {visibility: 'hidden'} : {}} onClick={pressPost} onAnimationEnd={animEnds}>
         <div className="Header">
-            <span className="Author">{p.author}</span>
+            <div className="Header-left">
+                {!props.read ? <Icon className="ReadIcon">fiber_manual_record</Icon> : null}
+                <span className="Author" style={props.read ? {left: 0} : null}>{p.author}</span>
+            </div>            
             <span className="CreatedAt">{formatCreatedAt(p.createdTime)}</span>
         </div>
         <div className="Body">

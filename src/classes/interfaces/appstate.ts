@@ -7,4 +7,5 @@ export interface AppState {
     fetchingPosts: boolean;
     currentError: string;
     dismissData: DismissData | undefined;
+    postsRead: string[];
 }

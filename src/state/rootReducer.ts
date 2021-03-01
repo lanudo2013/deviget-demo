@@ -8,6 +8,7 @@ const initialState: AppState = {
     selectedPost: null,
     fetchingPosts: false,
     currentError: '',
+    postsRead: [],
     dismissData: undefined
 };
 
@@ -38,6 +39,11 @@ export default function(state: AppState = initialState, action: AppAction<any>):
             return {
                 ...state,
                 currentError: action.payload
+            };
+        case Constants.REDUX_ACTIONS.READ_POSTS_IDS:
+            return {
+                ...state,
+                postsRead: action.payload
             };
         case Constants.REDUX_ACTIONS.UPDATE_DONE_DISMISS_DATA:
             return {
