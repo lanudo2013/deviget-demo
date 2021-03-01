@@ -2,12 +2,15 @@
   "name": "deviget-demo",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {
-    "http-server": "~0.1.0"
+    "http-server": "~0.1.0",
+    "express": "^4.15.2"
   },
   "scripts": {
-    "start": "http-server --port 80",
-    "build": ""
+    "start": "http-server --port 80"
   },
   "browserslist": {
     "production": [
