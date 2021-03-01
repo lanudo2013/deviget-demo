@@ -3,12 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "http-server": ""
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "cd",
-    "test": "jest --coverage",
-    "eject": "react-scripts eject"
+    "start": "http-server --port 80",
+    "build": ""
   },
   "browserslist": {
     "production": [
