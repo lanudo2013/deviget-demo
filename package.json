@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "http-server": ""
+    "http-server": "^2.4.46"
   },
   "scripts": {
     "start": "http-server --port 80",
