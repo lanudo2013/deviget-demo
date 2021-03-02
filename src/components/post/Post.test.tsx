@@ -1,6 +1,6 @@
 import { fromPostType, PostType } from '../../classes/enums/post-type';
 import { Post } from '../../classes/interfaces/post';
-import { mount, ReactWrapper } from "enzyme";
+import { mount, ReactWrapper } from 'enzyme';
 import moment from 'moment';
 import React, { useRef } from 'react';
 import renderer from 'react-test-renderer';
@@ -13,7 +13,7 @@ describe('Post component', () => {
     let listP: Post[];
     let onPressFn: (p: Post) => void;
     let onPressDismissFn: (p: Post) => void;
-    let currentDate = new Date();
+    const currentDate = new Date();
 
     function doBasicChecks(node: any) {
         const tree = renderer.create(node).toJSON();
@@ -31,7 +31,6 @@ describe('Post component', () => {
         domElement = root.find('div.PostContainer > div.Footer');
         expect(domElement.length).toEqual(1);
         expect(domElement.get(0)).toBeTruthy();
-
     }
 
     function checkAuthorTitleComments(p: Post, expNumCommentsText: string) {
@@ -50,58 +49,73 @@ describe('Post component', () => {
     }
 
     function createPosts(): Post[] {
-        return [{
-            author: 'author1',
-            createdTime: moment(currentDate).add(-4, 'days').add(-6, 'hours').add(+new Date().getTimezoneOffset(), 'minutes').toDate(),
-            createdTimeUtc: 0,
-            numberOfComments: 1230,
-            id: 'p1',
-            postType: PostType.IMAGE,
-            thumbnailUrl: '/p1-thumb.jpg',
-            title: 'My new post 1',
-            subreddit: 'Sub',
-            postUrl: '/p1.jpg',
-            postHtml: null
-        },
-        {
-            author: 'author1',
-            createdTime: moment(currentDate).add(-10, 'days').add(+new Date().getTimezoneOffset(), 'minutes').toDate(),
-            numberOfComments: 878,
-            id: 'p2',
-            postType: PostType.IMAGE,
-            thumbnailUrl: '/p2-thumb.jpg',
-            title: 'My new post 2',
-            createdTimeUtc: 0,
-            subreddit: 'Sub2',
-            postUrl: '/p2.jpg',
-            postHtml: null
-        },
-        {
-            author: 'author2',
-            createdTime: moment(currentDate).add(-2, 'minutes').add(+new Date().getTimezoneOffset(), 'minutes').toDate(),
-            numberOfComments: 900,
-            id: 'p3',
-            postType: PostType.LINK,
-            thumbnailUrl: undefined,
-            createdTimeUtc: 0,
-            title: 'My new post 3',
-            subreddit: 'Sub3',
-            postUrl: '/p3.jpg',
-            postHtml: null
-        },
-        {
-            author: 'author3',
-            createdTime: moment(currentDate).add(-12, 'seconds').add(+new Date().getTimezoneOffset(), 'minutes').toDate(),
-            numberOfComments: 0,
-            id: 'p4',
-            postType: PostType.SELF,
-            thumbnailUrl: undefined,
-            createdTimeUtc: 0,
-            title: 'My new post 4',
-            subreddit: 'Sub4',
-            postUrl: undefined,
-            postHtml: null
-        }];
+        return [
+            {
+                author: 'author1',
+                createdTime: moment(currentDate)
+                    .add(-4, 'days')
+                    .add(-6, 'hours')
+                    .add(+new Date().getTimezoneOffset(), 'minutes')
+                    .toDate(),
+                createdTimeUtc: 0,
+                numberOfComments: 1230,
+                id: 'p1',
+                postType: PostType.IMAGE,
+                thumbnailUrl: '/p1-thumb.jpg',
+                title: 'My new post 1',
+                subreddit: 'Sub',
+                postUrl: '/p1.jpg',
+                postHtml: null
+            },
+            {
+                author: 'author1',
+                createdTime: moment(currentDate)
+                    .add(-10, 'days')
+                    .add(+new Date().getTimezoneOffset(), 'minutes')
+                    .toDate(),
+                numberOfComments: 878,
+                id: 'p2',
+                postType: PostType.IMAGE,
+                thumbnailUrl: '/p2-thumb.jpg',
+                title: 'My new post 2',
+                createdTimeUtc: 0,
+                subreddit: 'Sub2',
+                postUrl: '/p2.jpg',
+                postHtml: null
+            },
+            {
+                author: 'author2',
+                createdTime: moment(currentDate)
+                    .add(-2, 'minutes')
+                    .add(+new Date().getTimezoneOffset(), 'minutes')
+                    .toDate(),
+                numberOfComments: 900,
+                id: 'p3',
+                postType: PostType.LINK,
+                thumbnailUrl: undefined,
+                createdTimeUtc: 0,
+                title: 'My new post 3',
+                subreddit: 'Sub3',
+                postUrl: '/p3.jpg',
+                postHtml: null
+            },
+            {
+                author: 'author3',
+                createdTime: moment(currentDate)
+                    .add(-12, 'seconds')
+                    .add(+new Date().getTimezoneOffset(), 'minutes')
+                    .toDate(),
+                numberOfComments: 0,
+                id: 'p4',
+                postType: PostType.SELF,
+                thumbnailUrl: undefined,
+                createdTimeUtc: 0,
+                title: 'My new post 4',
+                subreddit: 'Sub4',
+                postUrl: undefined,
+                postHtml: null
+            }
+        ];
     }
 
     beforeEach((dn) => {
@@ -112,23 +126,30 @@ describe('Post component', () => {
     });
 
     test('Select post type', () => {
-        let val = fromPostType({post_hint: 'image'});
+        let val = fromPostType({ post_hint: 'image' });
         expect(val).toEqual(PostType.IMAGE);
-        val = fromPostType({is_video: true});
+        val = fromPostType({ is_video: true });
         expect(val).toEqual(PostType.VIDEO);
         val = fromPostType({});
         expect(val).toEqual(PostType.IMAGE);
-        val = fromPostType({selftext_html: '<div></div>'});
+        val = fromPostType({ selftext_html: '<div></div>' });
         expect(val).toEqual(PostType.SELF);
-        val = fromPostType({post_hint: 'rich:video'});
+        val = fromPostType({ post_hint: 'rich:video' });
         expect(val).toEqual(PostType.CONTENT_EMBED);
-      val = fromPostType({secure_media: {oembed: {html: '<div></div>'}}});
+        val = fromPostType({ secure_media: { oembed: { html: '<div></div>' } } });
         expect(val).toEqual(PostType.CONTENT_EMBED);
     });
- 
-    test('Load normal post', () => 
-    {
-        const node = <PostUI post={listP[0]} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn}  read={false}/>;
+
+    test('Load normal post', () => {
+        const node = (
+            <PostUI
+                post={listP[0]}
+                currentDate={currentDate}
+                onPress={onPressFn}
+                onPressDismiss={onPressDismissFn}
+                read={false}
+            />
+        );
         root = mount(node);
         doBasicChecks(node);
         checkAuthorTitleComments(listP[0], '1,230 comment/s');
@@ -143,10 +164,11 @@ describe('Post component', () => {
         expect(domElement.get(0).props.src).toEqual(listP[0].thumbnailUrl);
     });
 
-    test('Load normal post 2', () => 
-    {
+    test('Load normal post 2', () => {
         const p = listP[1];
-        const node = <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn}  read={false}/>;
+        const node = (
+            <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn} read={false} />
+        );
         root = mount(node);
         doBasicChecks(node);
         checkAuthorTitleComments(p, '878 comment/s');
@@ -160,14 +182,15 @@ describe('Post component', () => {
         expect(domElement.get(0)).toBeTruthy();
         expect(domElement.get(0).props.src).toEqual(p.thumbnailUrl);
 
-        let buttonWrapper: ReactWrapper = root.find(Button).find('.DismissButton');
+        const buttonWrapper: ReactWrapper = root.find(Button).find('.DismissButton');
         buttonWrapper.find('button').simulate('click');
     });
 
-    test('Load post without picture', () => 
-    {
+    test('Load post without picture', () => {
         const p = listP[2];
-        const node = <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn}  read={false}/>;
+        const node = (
+            <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn} read={false} />
+        );
         root = mount(node);
         doBasicChecks(node);
         checkAuthorTitleComments(p, '900 comment/s');
@@ -180,17 +203,25 @@ describe('Post component', () => {
         expect(domElement.get(0)).toBeUndefined();
     });
 
-    test('Press callbacks', () => 
-    {
+    test('Press callbacks', () => {
         const p = listP[3];
-        const postRef = {current: {fadeOut: null, slideOut: null}} as any;
-        const node = <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn} ref={postRef} read={false}/>;
-        
+        const postRef = { current: { fadeOut: null, slideOut: null } } as any;
+        const node = (
+            <PostUI
+                post={p}
+                currentDate={currentDate}
+                onPress={onPressFn}
+                onPressDismiss={onPressDismissFn}
+                ref={postRef}
+                read={false}
+            />
+        );
+
         root = mount(node);
         doBasicChecks(node);
         checkAuthorTitleComments(p, 'No comments');
 
-        let domElement = root.find('span.CreatedAt');
+        const domElement = root.find('span.CreatedAt');
         expect(domElement.length).toEqual(1);
         expect(domElement.text()).toEqual('Seconds ago');
 
@@ -209,34 +240,53 @@ describe('Post component', () => {
 
     test('from not read post to read post', () => {
         const p = listP[3];
-        const postRef = {current: {fadeOut: null, slideOut: null}} as any;
-        const node = <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn} ref={postRef} read={false}/>;
-        
+        const postRef = { current: { fadeOut: null, slideOut: null } } as any;
+        const node = (
+            <PostUI
+                post={p}
+                currentDate={currentDate}
+                onPress={onPressFn}
+                onPressDismiss={onPressDismissFn}
+                ref={postRef}
+                read={false}
+            />
+        );
+
         root = mount(node);
         let domElement = root.find('div.Header > div.Header-left > .ReadIcon');
         expect(domElement.length).toEqual(1);
         expect(domElement.get(0)).toBeTruthy();
-        root.setProps({read: true});
+        root.setProps({ read: true });
         domElement = root.find('div.Header > div.Header-left > .ReadIcon');
         expect(domElement.get(0)).toBeUndefined();
     });
 
     test('saved post', () => {
         const p = listP[3];
-        const postRef = {current: {fadeOut: null, slideOut: null}} as any;
-        const node = <PostUI post={p} currentDate={currentDate} onPress={onPressFn} onPressDismiss={onPressDismissFn} ref={postRef} read={false} saved={true} canRemove={true}/>;
-        
+        const postRef = { current: { fadeOut: null, slideOut: null } } as any;
+        const node = (
+            <PostUI
+                post={p}
+                currentDate={currentDate}
+                onPress={onPressFn}
+                onPressDismiss={onPressDismissFn}
+                ref={postRef}
+                read={false}
+                saved={true}
+                canRemove={true}
+            />
+        );
+
         root = mount(node);
         let domElement = root.find('div.Footer > div.PostOptions > *');
         expect(domElement.length).toEqual(1);
         expect(domElement.find('.RemoveButton').get(0)).toBeTruthy();
-        root.setProps({canRemove: false});
+        root.setProps({ canRemove: false });
         domElement = root.update().find('div.Footer > div.PostOptions > *');
         expect(domElement.length).toEqual(1);
         expect(domElement.find('.DismissButton').get(0)).toBeTruthy();
         domElement = root.find('div.Header-right > .SavedIcon');
         expect(domElement.length).toEqual(1);
         expect(domElement.get(0)).toBeTruthy();
-
     });
 });

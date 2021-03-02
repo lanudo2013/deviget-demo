@@ -1,4 +1,4 @@
-import { Post } from "../classes/interfaces/post";
+import { Post } from '../classes/interfaces/post';
 
 export class PostDBService {
     private static instance: PostDBService;
@@ -20,7 +20,7 @@ export class PostDBService {
         db.createObjectStore('ReadPosts', { keyPath: 'id' });
         db.createObjectStore('DismissedPosts', { keyPath: 'id' });
         const objectStore = db.createObjectStore('SavedPosts', { keyPath: 'id' });
-        objectStore.createIndex("jsonData", "jsonData", { unique: false });
+        objectStore.createIndex('jsonData', 'jsonData', { unique: false });
         const tx = (ev.target as any).transaction as IDBTransaction;
         tx.oncomplete = () => {
             this.dbInstance = db;
@@ -50,7 +50,6 @@ export class PostDBService {
                 rej(ev);
             };
         });
-        
     }
 
     public createDB(): Promise<any> {
@@ -61,17 +60,17 @@ export class PostDBService {
         return this.getDBRef().then(() => {
             return new Promise((res, rej) => {
                 if (this.dbInstance) {
-                    const transaction = this.dbInstance.transaction(["ReadPosts"], "readwrite");
-    
-                    transaction.onerror = function(event) {
+                    const transaction = this.dbInstance.transaction(['ReadPosts'], 'readwrite');
+
+                    transaction.onerror = function (event) {
                         rej(event);
                     };
                     // create an object store on the transaction
-                    const objectStore = transaction.objectStore("ReadPosts");
+                    const objectStore = transaction.objectStore('ReadPosts');
                     // add our newItem object to the object store
-                    const objectStoreRequest = objectStore.put({id});
-        
-                    objectStoreRequest.onsuccess = function(event) {
+                    const objectStoreRequest = objectStore.put({ id });
+
+                    objectStoreRequest.onsuccess = function (event) {
                         res('');
                     };
                     objectStoreRequest.onerror = (ev: Event) => {
@@ -88,16 +87,16 @@ export class PostDBService {
         return this.getDBRef().then(() => {
             return new Promise((res, rej) => {
                 if (this.dbInstance) {
-                    const transaction = this.dbInstance.transaction(["DismissedPosts"], "readwrite");
-    
-                    transaction.onerror = function(event) {
+                    const transaction = this.dbInstance.transaction(['DismissedPosts'], 'readwrite');
+
+                    transaction.onerror = function (event) {
                         rej(event);
                     };
                     // create an object store on the transaction
-                    const objectStore = transaction.objectStore("DismissedPosts");
+                    const objectStore = transaction.objectStore('DismissedPosts');
                     // add our newItem object to the object store
-                    const objectStoreRequest = objectStore.put({id: id});
-                    objectStoreRequest.onsuccess = function(event) {
+                    const objectStoreRequest = objectStore.put({ id: id });
+                    objectStoreRequest.onsuccess = function (event) {
                         res('');
                     };
                     objectStoreRequest.onerror = (ev: Event) => {
@@ -108,23 +107,22 @@ export class PostDBService {
                 rej(new Error('Not created db'));
             });
         });
-        
     }
 
     public savePost(p: Post): Promise<any> {
         return this.getDBRef().then(() => {
             return new Promise((res, rej) => {
                 if (this.dbInstance) {
-                    const transaction = this.dbInstance.transaction(["SavedPosts"], "readwrite");
-    
-                    transaction.onerror = function(event) {
+                    const transaction = this.dbInstance.transaction(['SavedPosts'], 'readwrite');
+
+                    transaction.onerror = function (event) {
                         rej(event);
                     };
                     // create an object store on the transaction
-                    const objectStore = transaction.objectStore("SavedPosts");
+                    const objectStore = transaction.objectStore('SavedPosts');
                     // add our newItem object to the object store
-                    const objectStoreRequest = objectStore.put({id: p.id, jsonData: JSON.stringify(p)});
-                    objectStoreRequest.onsuccess = function(event) {
+                    const objectStoreRequest = objectStore.put({ id: p.id, jsonData: JSON.stringify(p) });
+                    objectStoreRequest.onsuccess = function (event) {
                         res('');
                     };
                     objectStoreRequest.onerror = (ev: Event) => {
@@ -135,32 +133,33 @@ export class PostDBService {
                 rej(new Error('Not created db'));
             });
         });
-        
     }
 
     public getSavedPosts(): Promise<Post[]> {
         return this.getDBRef().then(() => {
             return new Promise((res, rej) => {
                 if (this.dbInstance) {
-                    const transaction = this.dbInstance.transaction(["SavedPosts"], "readonly");
-    
-                    transaction.onerror = function(event) {
+                    const transaction = this.dbInstance.transaction(['SavedPosts'], 'readonly');
+
+                    transaction.onerror = function (event) {
                         rej(event);
                     };
                     // create an object store on the transaction
-                    const objectStore = transaction.objectStore("SavedPosts");
+                    const objectStore = transaction.objectStore('SavedPosts');
                     const query = objectStore.getAll();
-                    query.onsuccess = function(ev) {
-                        res(((ev.target as any).result || []).map((x: any) => {
-                            const result: Post = JSON.parse(x.jsonData);
-                            result.createdTime = new Date(result.createdTimeUtc);
-                            return result;
-                        }));
+                    query.onsuccess = function (ev) {
+                        res(
+                            ((ev.target as any).result || []).map((x: any) => {
+                                const result: Post = JSON.parse(x.jsonData);
+                                result.createdTime = new Date(result.createdTimeUtc);
+                                return result;
+                            })
+                        );
                     };
-                    query.onerror = function(ev) {
+                    query.onerror = function (ev) {
                         rej(ev);
                     };
-                    
+
                     return;
                 }
                 rej(new Error('Not created db'));
@@ -175,19 +174,19 @@ export class PostDBService {
         return this.getDBRef().then(() => {
             return new Promise((res, rej) => {
                 if (this.dbInstance) {
-                    const transaction = this.dbInstance.transaction(["DismissedPosts"], "readwrite");
-    
-                    transaction.onerror = function(event) {
+                    const transaction = this.dbInstance.transaction(['DismissedPosts'], 'readwrite');
+
+                    transaction.onerror = function (event) {
                         rej(event);
                     };
                     // create an object store on the transaction
-                    const objectStore = transaction.objectStore("DismissedPosts");
+                    const objectStore = transaction.objectStore('DismissedPosts');
                     // add our newItem object to the object store
                     const requests: IDBRequest[] = [];
-                    ids.forEach(id => {
-                        const obj = objectStore.put({id: id});
+                    ids.forEach((id) => {
+                        const obj = objectStore.put({ id: id });
                         requests.push(obj);
-                        obj.onsuccess = function(event) {
+                        obj.onsuccess = function (event) {
                             let allfinished = true;
                             for (const i in requests) {
                                 const req = requests[i];
@@ -209,23 +208,22 @@ export class PostDBService {
                 rej(new Error('Not created db'));
             });
         });
-        
     }
 
     public getDismissedKeys(): Promise<string[]> {
         return this.getDBRef().then(() => {
             return new Promise((res, rej) => {
                 if (this.dbInstance) {
-                    const transaction = this.dbInstance.transaction(["DismissedPosts"], "readonly");
-                    transaction.onerror = function(event) {
+                    const transaction = this.dbInstance.transaction(['DismissedPosts'], 'readonly');
+                    transaction.onerror = function (event) {
                         rej(event);
                     };
-                    const objectStore = transaction.objectStore("DismissedPosts");
+                    const objectStore = transaction.objectStore('DismissedPosts');
                     const query = objectStore.getAll();
-                    query.onsuccess = function(ev) {
+                    query.onsuccess = function (ev) {
                         res(((ev.target as any).result || []).map((x: any) => x.id));
                     };
-                    query.onerror = function(ev) {
+                    query.onerror = function (ev) {
                         rej(ev);
                     };
                     return;
@@ -233,23 +231,22 @@ export class PostDBService {
                 rej(new Error('Not created db'));
             });
         });
-        
     }
 
     public removeSavedPost(id: string): Promise<any> {
         return this.getDBRef().then(() => {
             return new Promise((res, rej) => {
                 if (this.dbInstance) {
-                    const transaction = this.dbInstance.transaction(["SavedPosts"], "readwrite");
-                    transaction.onerror = function(event) {
+                    const transaction = this.dbInstance.transaction(['SavedPosts'], 'readwrite');
+                    transaction.onerror = function (event) {
                         rej(event);
                     };
-                    const objectStore = transaction.objectStore("SavedPosts");
+                    const objectStore = transaction.objectStore('SavedPosts');
                     const query = objectStore.delete(id);
-                    query.onsuccess = function(ev) {
+                    query.onsuccess = function (ev) {
                         res(true);
                     };
-                    query.onerror = function(ev) {
+                    query.onerror = function (ev) {
                         rej(ev);
                     };
                     return;
@@ -263,16 +260,16 @@ export class PostDBService {
         return this.getDBRef().then(() => {
             return new Promise((res, rej) => {
                 if (this.dbInstance) {
-                    const transaction = this.dbInstance.transaction(["ReadPosts"], "readonly");
-                    transaction.onerror = function(event) {
+                    const transaction = this.dbInstance.transaction(['ReadPosts'], 'readonly');
+                    transaction.onerror = function (event) {
                         rej(event);
                     };
-                    const objectStore = transaction.objectStore("ReadPosts");
+                    const objectStore = transaction.objectStore('ReadPosts');
                     const query = objectStore.getAll();
-                    query.onsuccess = function(ev) {
+                    query.onsuccess = function (ev) {
                         res(((ev.target as any).result || []).map((x: any) => x.id));
                     };
-                    query.onerror = function(ev) {
+                    query.onerror = function (ev) {
                         rej(ev);
                     };
                     return;
@@ -281,5 +278,4 @@ export class PostDBService {
             });
         });
     }
-
 }

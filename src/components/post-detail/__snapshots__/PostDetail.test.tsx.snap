@@ -169,6 +169,8 @@ exports[`Post component Show video post detail 1`] = `
           autoPlay={true}
           className="Video"
           controls={true}
+          muted={false}
+          preload="auto"
           src="http://myurl.com/video.mpg"
         />
       </div>
