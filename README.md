@@ -1,70 +1,74 @@
-# Getting Started with Create React App
+# Deviget challenge demo
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+This is the deliverable source for the Deviget challenge assignment. Behind, some details of the application project will be provided, regarding project structure, libraries and tools that were used and a wide range of techincal aspects that were considered while carrying out the implementation. Moreover, it will be explained different steps to run the app locally and information about the release deployment on the cloud.
 
-In the project directory, you can run:
+## Libraries, APIs and tools used ##
 
-### `npm start`
+The app was developed as a SPA in React 17 + Typescript 4 using Node Package Manager 6 (NPM) as a dependency management tool. Other tools were used:
+*	SASS as a CSS preprocessor
+* Jest to unit test the UI components
+*	Enzyme to navigate over the UI components DOM tree and to compare the model values with the rendered values in the output DOM.
+*	Ts linter and prettier to promote code quality assurance
+* Material-UI as the UI framework 
+* Redux library for state management. Redux thunk library for dealing with async actions.
+Under React language, it was used the React Hooks variant (not class components).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+For local storage, it was used IndexedDB supported by most of the well-known browsers. It allows to create object stores similar to mongodb collection and it behaves as a non-relational databse. It was assessed as a better option than using the simple local storage API as it permits storing values in different data types and it offers a clear API to run CRUD operations over store records, while the other one only allows to store key-value string pairs.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Project structure ##
 
-### `npm test`
+The project consists of many project folders. The root folder contains files for installing dependencies (package.json), configuration files for typescript, eslinters and jest testing framework. The source files are included under src folder. This folder contains the follwoing set of files/folders:
+* classes: Includes classes, interfaces and enums used by components and services
+* components: Includes different presentational and container components of the app.
+* mocks: Includes service mocks to be provided to test instances
+* services: Includes services to get posts from the backend (reddit dev api) and to store the user's post data on browser's local storage.
+* state. Contains files to handle state management adderessed by redux library.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+***Components***
 
-### `npm run build`
+Three main components compund the application: Post component, PostDetail component and PostList component.
+* Post component: Renders a post basic data unit. It shows post title, thumbnail picture, author, creation date, number of comments and read status. This component becomes each post item in the post list component. Two actions can be done over the post: dismiss the post and save the post on the local storage.
+* PostDetail component. This component is responsible for rendering the post content, according to different post types: Image, Video, Embed Video, Html or Link.
+* PostList component. This componentes shows a list of Post components in a scrollable container. It renders options at the top to perform actions over posts. This actions allow to:
+1. Set posts request page size
+2. Reloading all posts from scratch
+3. Dismiss all showing posts and 
+4. Show saved posts 
+Moreover, when sticking the scroll to bottom, the component triggers a new posts request to the server to fetch additional posts and concat the result at the end of the current list. It excludes the already dismissed posts from the result.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+***Services***
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Three main services were implemented for the application:
+1. PostDBService. Runs operation over IndexedDB storage, such as retrieving read posts, saved posts, or inserting a new read post or a new dismissed post
+2. PostHttpService. Create http requests for getting posts from reddit API. It also handles pagination matter.
+3. PostService. Recieves request from components and coordinates data flows from PostDBService and PostHttpService.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Tests implemented ##
 
-### `npm run eject`
+For the applications, it was implemented three tests: Post.test, PostDetail.test and PostList.test. Post.test and PostDetail.test are unit tests for Post component and PostDetail component respectively, while PostList.test is a integration test that tests all basic use cases from user perspective.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Steps to run app in dev mode and run tests ##
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Prerequisites to run the frontend.
+* NPM ^6.0 installed
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+To run the frontend app:
+1.	Open a terminal and point to the frontend directory
+2.	Run *npm install*. This command will generate all the project dependencies in the node_modules folder.
+3.	If you want to run the app in a browser, type *npm run start* and it will be launched by webpack dev server in the url http://localhost:3000.
+4.	If you want to build the app for a production environment, type *npm run build* and sources will be generated under ‘build‘ folder.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+To run tests:
+1.	Open a terminal and point to the frontend directory
+2.	Run *npm run test*. 
+3.	Test results will be displayed in the console output. In addition to that, a coverage html files will be generated under 'coverage' folder on the project root path.
+The tests are located in source files with name matching pattern **.test.tsx.
 
-## Learn More
+## Release deployment ##
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The app was deployed on heroku cloud platform from built sources and running a http-server instance. The app can be accessed at https://deviget-demo.herokuapp.com/ .
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Future tasks pending ##
+1. Create tests for handling exceptions that may arise from a http request or running statements on the IndexedDB.
+2. Create E2E tests. Puppeter is a good tool candidate for this.
