@@ -12,6 +12,7 @@ The app was developed as a SPA in React 17 + Typescript 4 using Node Package Man
 *	Ts linter and prettier to promote code quality assurance
 * Material-UI as the UI framework 
 * Redux library for state management. Redux thunk library for dealing with async actions.
+
 Under React language, it was used the React Hooks variant (not class components).
 
 For local storage, it was used IndexedDB supported by most of the well-known browsers. It allows to create object stores similar to mongodb collection and it behaves as a non-relational databse. It was assessed as a better option than using the simple local storage API as it permits storing values in different data types and it offers a clear API to run CRUD operations over store records, while the other one only allows to store key-value string pairs.
@@ -46,7 +47,8 @@ Three main services were implemented for the application:
 
 ***Tests implemented***
 
-For the applications, it was implemented three tests: Post.test, PostDetail.test and PostList.test. Post.test and PostDetail.test are unit tests for Post component and PostDetail component respectively, while PostList.test is a integration test that tests all basic use cases from user perspective.
+For the applications, it was implemented three tests: Post.test, PostDetail.test and PostList.test. Post.test and PostDetail.test are unit tests for Post component and PostDetail component respectively, while PostList.test is a integration test that tests all basic use cases of the app from user perspective.
+Render snapshots of each component are included in the sources.
 
 ## Steps to run app in dev mode and run tests ##
 
@@ -61,9 +63,11 @@ To run the frontend app:
 
 To run tests:
 1.	Open a terminal and point to the frontend directory
-2.	Run *npm run test*. 
-3.	Test results will be displayed in the console output. In addition to that, a coverage html files will be generated under 'coverage' folder on the project root path.
-The tests are located in source files with name matching pattern **.test.tsx.
+2.	Run *npm run test*. (if you wish to reset snapshots, run *npm run test -- --u*)
+3.	Test results will be displayed in the console output. 
+
+In addition to that, a coverage html files will be generated under 'coverage' folder on the project root path.
+The tests are located in source files with name matching pattern **.test.tsx. 
 
 ## Release deployment ##
 
@@ -72,3 +76,4 @@ The app was deployed on heroku cloud platform from built sources and running a h
 ## Future tasks pending ##
 1. Create tests for handling exceptions that may arise from a http request or running statements on the IndexedDB.
 2. Create E2E tests. Puppeter is a good tool candidate for this.
+3. Improve stylization
