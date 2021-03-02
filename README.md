@@ -10,7 +10,7 @@ The app was developed as a SPA in React 17 + Typescript 4 using Node Package Man
 * Jest to unit test the UI components
 *	Enzyme to navigate over the UI components DOM tree and to compare the model values with the rendered values in the output DOM.
 *	Ts linter and prettier to promote code quality assurance
-* Material-UI as the UI framework 
+* Material-UI and Flexbox as UI frameworks 
 * Redux library for state management. Redux thunk library for dealing with async actions.
 
 Under React language, it was used the React Hooks variant (not class components).
