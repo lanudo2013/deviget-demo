@@ -71,7 +71,7 @@ The tests are located in source files with name matching pattern **.test.tsx.
 
 ## Release deployment ##
 
-The app was deployed on heroku cloud platform from built sources and running a http-server instance. The app can be accessed at https://deviget-demo.herokuapp.com/ .
+The app was deployed on heroku cloud platform from built sources and running a http-server instance. The app can be accessed at https://deviget-demo.herokuapp.com/ . The app were tested in the following browsers: Chrome 88.0, Firefox 83.0 and Opera 74.0.
 
 ## Future tasks pending ##
 1. Create tests for handling exceptions that may arise from a http request or running statements on the IndexedDB.
