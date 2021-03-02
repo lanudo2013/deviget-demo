@@ -5,7 +5,7 @@ This is the deliverable source for the Deviget challenge assignment. Behind, som
 
 ## Libraries, APIs and tools used ##
 
-The app was developed as a SPA in React 17 + Typescript 4 using Node Package Manager 6 (NPM) as a dependency management tool. Other tools were used:
+The app was developed as a SPA in React 17 + Typescript 4 using Node Package Manager 6 (NPM) as a dependency management tool. The following tools/libraries were used: 
 *	SASS as a CSS preprocessor
 * Jest to unit test the UI components
 *	Enzyme to navigate over the UI components DOM tree and to compare the model values with the rendered values in the output DOM.
@@ -19,7 +19,7 @@ For local storage, it was used IndexedDB supported by most of the well-known bro
 
 ## Project structure ##
 
-The project consists of many project folders. The root folder contains files for installing dependencies (package.json), configuration files for typescript, eslinters and jest testing framework. The source files are included under src folder. This folder contains the follwoing set of files/folders:
+The project consists of many project folders. The root folder contains files for installing dependencies (package.json), configuration files for typescript, eslinters and jest testing framework. The source files are included under src folder. This folder contains the following set of files/folders:
 * classes: Includes classes, interfaces and enums used by components and services
 * components: Includes different presentational and container components of the app.
 * mocks: Includes service mocks to be provided to test instances
