@@ -44,7 +44,7 @@ Three main services were implemented for the application:
 2. PostHttpService. Create http requests for getting posts from reddit API. It also handles pagination matter.
 3. PostService. Recieves request from components and coordinates data flows from PostDBService and PostHttpService.
 
-## Tests implemented ##
+***Tests implemented***
 
 For the applications, it was implemented three tests: Post.test, PostDetail.test and PostList.test. Post.test and PostDetail.test are unit tests for Post component and PostDetail component respectively, while PostList.test is a integration test that tests all basic use cases from user perspective.
 
@@ -56,7 +56,7 @@ Prerequisites to run the frontend.
 To run the frontend app:
 1.	Open a terminal and point to the frontend directory
 2.	Run *npm install*. This command will generate all the project dependencies in the node_modules folder.
-3.	If you want to run the app in a browser, type *npm run start* and it will be launched by webpack dev server in the url http://localhost:3000.
+3.	If you want to run the app in a browser, type *npm run start* and it will be launched in the url http://localhost:3000.
 4.	If you want to build the app for a production environment, type *npm run build* and sources will be generated under ‘build‘ folder.
 
 To run tests:
